@@ -1,0 +1,71 @@
+---
+import Logo from './Logo.astro';
+import { navigationItems } from '../data/navigation';
+
+interface Props {
+  variant?: 'light' | 'dark';
+}
+
+const { variant = 'light' } = Astro.props;
+---
+<header class={`site-header ${variant}`}>
+  <div class="header-inner">
+    <div class="header-left">
+      <Logo variant={variant} />
+    </div>
+    <nav class="header-right" aria-label="Main Navigation">
+      <ul class="nav-list">
+        {navigationItems.map(item => (
+          <li class="nav-item">
+            <a href={item.href} class="nav-link">{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 50;
+    pointer-events: none;
+    padding: var(--spacing-header-y) var(--spacing-header-x);
+  }
+
+  .header-inner {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: auto;
+  }
+
+  .nav-list {
+    display: flex;
+    list-style: none;
+    gap: clamp(1.8rem, 3.5vw, 3.5rem);
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  }
+
+  .site-header.dark .nav-link {
+    color: #1a1a1a;
+  }
+  .site-header.dark .nav-link:hover {
+    color: var(--color-gold);
+  }
+
+  @media (max-width: 640px) {
+    .site-header {
+      padding: 1.25rem 1.25rem;
+    }
+    .nav-list {
+      gap: 1.25rem;
+    }
+  }
+</style>

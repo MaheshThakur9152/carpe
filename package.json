@@ -1,0 +1,15 @@
+{
+  "name": "carpediam",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@fontsource/amiri": "^5.2.5",
+    "astro": "^5.4.2"
+  }
+}

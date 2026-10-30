@@ -1,0 +1,42 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  headerVariant?: 'light' | 'dark';
+  showFooter?: boolean;
+}
+
+const {
+  title = 'CARPE DIAM BOMBAY — High Jewellery Atelier',
+  description = 'Carpe Diam Bombay. Exceptional handcrafted high jewellery, uncut polki diamonds, carved gemstones and bespoke heirlooms in 14kt gold.',
+  headerVariant = 'light',
+  showFooter = true
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/carpediam-logo.svg" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <Header variant={headerVariant} />
+    <main>
+      <slot />
+    </main>
+    {showFooter && <Footer />}
+  </body>
+</html>
+
+<style>
+  main {
+    min-height: 100vh;
+  }
+</style>

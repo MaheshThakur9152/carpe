@@ -1,0 +1,130 @@
+---
+import type { HeroSlideData } from '../data/heroSlides';
+
+interface Props {
+  slide: HeroSlideData;
+  index: number;
+  isActive: boolean;
+}
+
+const { slide, index, isActive } = Astro.props;
+const hasContent = Boolean(slide.title);
+const hasStatement = Boolean(slide.statement);
+---
+<article 
+  class={`hero-slide ${isActive ? 'is-active' : ''}`}
+  data-slide-index={index}
+  aria-hidden={!isActive}
+>
+  <div class="slide-artwork-wrapper">
+    <img 
+      src={slide.image} 
+      alt={slide.alt} 
+      class="slide-artwork"
+      loading={index === 0 ? "eager" : "lazy"}
+      decoding="async"
+    />
+  </div>
+
+  {hasStatement && (
+    <div class="slide-statement-container">
+      <p class="slide-statement">{slide.statement}</p>
+    </div>
+  )}
+
+  {hasContent && (
+    <div class={`slide-content ${slide.position || 'lower-left'}`}>
+      <h2 class="product-title">{slide.title}</h2>
+      {slide.description && <p class="product-desc">{slide.description}</p>}
+    </div>
+  )}
+</article>
+
+<style>
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .hero-slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 2;
+  }
+
+  .slide-artwork-wrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .slide-artwork {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    user-select: none;
+  }
+
+  /* Centered brand statement (Slide 1) */
+  .slide-statement-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    width: 90%;
+    max-width: 780px;
+    text-align: center;
+    pointer-events: auto;
+  }
+
+  .slide-statement {
+    font-size: clamp(1.25rem, 2.2vw, 2.1rem);
+    color: #ffffff;
+    line-height: 1.55;
+    letter-spacing: 0.02em;
+    font-weight: 400;
+    white-space: pre-line;
+  }
+
+  /* Product copy on jewellery slides */
+  .slide-content {
+    position: absolute;
+    bottom: clamp(3.5rem, 8vh, 6.5rem);
+    z-index: 5;
+    pointer-events: auto;
+    text-align: center;
+  }
+
+  .slide-content.lower-left {
+    left: clamp(3rem, 7vw, 7.5rem);
+  }
+
+  .slide-content.lower-right {
+    right: clamp(3rem, 7vw, 7.5rem);
+  }
+
+  @media (max-width: 768px) {
+    .slide-statement {
+      font-size: 1.15rem;
+      line-height: 1.5;
+    }
+    .slide-content.lower-left,
+    .slide-content.lower-right {
+      left: 1.5rem;
+      right: 1.5rem;
+      bottom: 2.5rem;
+      text-align: center;
+    }
+  }
+</style>
