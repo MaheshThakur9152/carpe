@@ -143,9 +143,13 @@ const products = heroSlides.filter(s => Boolean(s.slug && s.title));
     color: var(--color-gold);
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
+    .the-edit-page {
+      padding: 5.5rem 1.25rem 3.5rem;
+    }
     .gallery-grid {
       grid-template-columns: 1fr;
+      gap: 1.5rem;
     }
   }
 </style>
