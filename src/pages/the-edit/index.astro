@@ -2,8 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { heroSlides } from '../../data/heroSlides';
 
-// Filter out slide 1 (pure landscape) and slide 2 (composition without copy) if desired, or show all with product names
-const products = heroSlides.filter(s => Boolean(s.title));
+const products = heroSlides.filter(s => Boolean(s.slug && s.title));
 ---
 <BaseLayout title="The Edit — CARPE DIAM BOMBAY">
   <div class="the-edit-page">
@@ -18,15 +17,16 @@ const products = heroSlides.filter(s => Boolean(s.title));
     <div class="edit-gallery">
       <div class="gallery-grid">
         {products.map((item) => (
-          <div class="edit-item">
+          <a href={`/the-edit/${item.slug}`} class="edit-item">
             <div class="item-visual">
               <img src={item.image} alt={item.alt} loading="lazy" />
             </div>
             <div class="item-meta">
               <h2 class="item-title">{item.title}</h2>
               {item.description && <p class="item-materials">{item.description}</p>}
+              <span class="item-cta">Discover Creation →</span>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>
@@ -80,12 +80,13 @@ const products = heroSlides.filter(s => Boolean(s.title));
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    text-decoration: none;
     transition: transform 0.4s ease, border-color 0.4s ease;
   }
 
   .edit-item:hover {
     transform: translateY(-4px);
-    border-color: rgba(197, 168, 108, 0.5);
+    border-color: rgba(197, 168, 108, 0.6);
   }
 
   .item-visual {
@@ -102,14 +103,14 @@ const products = heroSlides.filter(s => Boolean(s.title));
   }
 
   .edit-item:hover .item-visual img {
-    transform: scale(1.03);
+    transform: scale(1.04);
   }
 
   .item-meta {
     padding: 1.8rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
   }
 
   .item-title {
@@ -123,6 +124,23 @@ const products = heroSlides.filter(s => Boolean(s.title));
     color: var(--color-gold);
     white-space: pre-line;
     line-height: 1.6;
+  }
+
+  .item-cta {
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-gold-light);
+    margin-top: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: transform 0.3s ease;
+  }
+
+  .edit-item:hover .item-cta {
+    transform: translateX(4px);
+    color: var(--color-gold);
   }
 
   @media (max-width: 640px) {
