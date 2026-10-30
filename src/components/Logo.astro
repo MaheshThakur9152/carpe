@@ -35,6 +35,7 @@ const { variant = 'light', class: className = '' } = Astro.props;
     display: inline-flex;
     align-items: center;
     transition: opacity 0.3s ease;
+    flex-shrink: 0;
   }
   .logo-link:hover {
     opacity: 0.85;
@@ -56,5 +57,11 @@ const { variant = 'light', class: className = '' } = Astro.props;
   }
   .logo-link.dark .logo-bombay path {
     fill: #666666;
+  }
+
+  @media (max-width: 768px) {
+    .logo-svg {
+      width: clamp(96px, 25vw, 120px);
+    }
   }
 </style>
