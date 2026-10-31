@@ -324,11 +324,12 @@ const { variant = 'light' } = Astro.props;
 
 <script>
   function setupMobileMenu() {
-    const trigger = document.querySelector('[data-menu-trigger]');
+    const trigger = document.querySelector('[data-menu-trigger]') as HTMLElement | null;
     const closeBtn = document.querySelector('[data-menu-close]');
     const overlay = document.getElementById('mobile-menu-overlay');
 
-    if (!trigger || !overlay) return;
+    if (!trigger || !overlay || trigger.dataset.bound) return;
+    trigger.dataset.bound = 'true';
 
     function openMenu(e) {
       if (e) e.stopPropagation();

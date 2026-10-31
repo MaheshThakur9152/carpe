@@ -69,6 +69,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
     </div>
   </div>
+
+  <script>
+    function prefillInquiry() {
+      const params = new URLSearchParams(window.location.search);
+      const inquiry = params.get('inquiry');
+      if (!inquiry) return;
+      const msg = document.getElementById('message') as HTMLTextAreaElement | null;
+      const interest = document.getElementById('interest') as HTMLSelectElement | null;
+      if (interest) interest.value = 'polki';
+      if (msg && !msg.value) {
+        const formatted = inquiry.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+        msg.value = `I am interested in requesting a private viewing of ${formatted}.`;
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', prefillInquiry);
+    } else {
+      prefillInquiry();
+    }
+  </script>
 </BaseLayout>
 
 <style>

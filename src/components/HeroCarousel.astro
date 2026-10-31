@@ -45,7 +45,8 @@ import { heroSlides } from '../data/heroSlides';
 <script>
   function setupCarousel() {
     const container = document.querySelector('.hero-carousel-container') as HTMLElement | null;
-    if (!container) return;
+    if (!container || container.dataset.bound) return;
+    container.dataset.bound = 'true';
 
     const slides = container.querySelectorAll<HTMLElement>('.hero-slide');
     const prevBtn = container.querySelector<HTMLButtonElement>('[data-carousel-prev]');

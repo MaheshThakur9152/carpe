@@ -36,13 +36,15 @@ const {
       type="font/woff2" 
       crossorigin 
     />
-    <link 
-      rel="preload" 
-      href="/Homepage-1.webp" 
-      as="image" 
-      type="image/webp" 
-      fetchpriority="high" 
-    />
+    {isHome && (
+      <link 
+        rel="preload" 
+        href="/Homepage-1.webp" 
+        as="image" 
+        type="image/webp" 
+        fetchpriority="high" 
+      />
+    )}
   </head>
   <body class={isHome ? 'is-home-page' : ''}>
     <Header variant={headerVariant} />
