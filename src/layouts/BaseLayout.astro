@@ -23,10 +23,26 @@ const {
 <html lang="en" class={isHome ? 'is-home-page' : ''}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/carpediam-logo.svg" />
     <meta name="description" content={description} />
     <title>{title}</title>
+
+    <!-- Critical Assets Preload -->
+    <link 
+      rel="preload" 
+      href="/fonts/amiri-latin-400-normal.woff2" 
+      as="font" 
+      type="font/woff2" 
+      crossorigin 
+    />
+    <link 
+      rel="preload" 
+      href="/Homepage-1.webp" 
+      as="image" 
+      type="image/webp" 
+      fetchpriority="high" 
+    />
   </head>
   <body class={isHome ? 'is-home-page' : ''}>
     <Header variant={headerVariant} />

@@ -56,6 +56,21 @@ import { heroSlides } from '../data/heroSlides';
     let currentIndex = 0;
     const total = slides.length;
 
+    function loadSlideImage(slideEl: HTMLElement) {
+      const img = slideEl.querySelector<HTMLImageElement>('img[data-src]');
+      if (img && img.dataset.src) {
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+      }
+    }
+
+    function preloadAdjacent(idx: number) {
+      const nextIdx = (idx + 1) % total;
+      const prevIdx = (idx - 1 + total) % total;
+      if (slides[nextIdx]) loadSlideImage(slides[nextIdx]);
+      if (slides[prevIdx]) loadSlideImage(slides[prevIdx]);
+    }
+
     function goToSlide(targetIndex: number) {
       if (targetIndex < 0) {
         currentIndex = total - 1;
@@ -65,11 +80,24 @@ import { heroSlides } from '../data/heroSlides';
         currentIndex = targetIndex;
       }
 
+      if (slides[currentIndex]) {
+        loadSlideImage(slides[currentIndex]);
+      }
+
       slides.forEach((slide, idx) => {
         const isActive = idx === currentIndex;
         slide.classList.toggle('is-active', isActive);
         slide.setAttribute('aria-hidden', (!isActive).toString());
       });
+
+      preloadAdjacent(currentIndex);
+    }
+
+    // Schedule background prefetch of adjacent slides after initial paint
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(() => preloadAdjacent(0));
+    } else {
+      setTimeout(() => preloadAdjacent(0), 1000);
     }
 
     prevBtn?.addEventListener('click', () => goToSlide(currentIndex - 1));

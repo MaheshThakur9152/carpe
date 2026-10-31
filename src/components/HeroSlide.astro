@@ -10,6 +10,7 @@ interface Props {
 const { slide, index, isActive } = Astro.props;
 const hasContent = Boolean(slide.title);
 const hasStatement = Boolean(slide.statement);
+const isCritical = index === 0;
 ---
 <article 
   class={`hero-slide ${isActive ? 'is-active' : ''}`}
@@ -18,11 +19,13 @@ const hasStatement = Boolean(slide.statement);
 >
   <div class="slide-artwork-wrapper">
     <img 
-      src={slide.image} 
+      src={isCritical ? slide.image : undefined}
+      data-src={!isCritical ? slide.image : undefined}
       alt={slide.alt} 
       class="slide-artwork"
-      loading={index === 0 ? "eager" : "lazy"}
-      decoding="async"
+      loading={isCritical ? "eager" : "lazy"}
+      fetchpriority={isCritical ? "high" : "low"}
+      decoding={isCritical ? "sync" : "async"}
     />
   </div>
 
