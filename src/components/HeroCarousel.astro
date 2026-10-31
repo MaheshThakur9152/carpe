@@ -141,6 +141,8 @@ import { heroSlides } from '../data/heroSlides';
         lastSwipeTimestamp = Date.now();
         if (diff > 0) goToSlide(currentIndex + 1);
         else goToSlide(currentIndex - 1);
+      } else {
+        isSwiping = false;
       }
     }, { passive: true });
 
