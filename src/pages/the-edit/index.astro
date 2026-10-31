@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { heroSlides } from '../../data/heroSlides';
+
+const products = heroSlides.filter(s => Boolean(s.slug && s.title));
+---
+<BaseLayout title="The Edit — CARPE DIAM BOMBAY">
+  <div class="the-edit-page">
+    <header class="edit-header">
+      <span class="eyebrow">Curated Collection</span>
+      <h1>The Edit</h1>
+      <p class="edit-intro">
+        An assemblage of fine jewellery, bespoke heirlooms and botanical high creations handcrafted in 14kt gold.
+      </p>
+    </header>
+
+    <div class="edit-gallery">
+      <div class="gallery-grid">
+        {products.map((item) => (
+          <a href={`/the-edit/${item.slug}`} class="edit-item">
+            <div class="item-visual">
+              <img src={item.image} alt={item.alt} loading="lazy" />
+            </div>
+            <div class="item-meta">
+              <h2 class="item-title">{item.title}</h2>
+              {item.description && <p class="item-materials">{item.description}</p>}
+              <span class="item-cta">Discover Creation →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .the-edit-page {
+    padding: clamp(7rem, 12vh, 10rem) var(--spacing-header-x) clamp(4rem, 8vw, 7rem);
+    background-color: var(--color-bg-dark);
+  }
+
+  .edit-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto clamp(3.5rem, 6vw, 5.5rem);
+  }
+
+  .eyebrow {
+    font-size: 0.95rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+
+  .edit-header h1 {
+    font-size: clamp(2.5rem, 4.5vw, 4rem);
+    color: var(--color-text-white);
+    margin-bottom: 1.2rem;
+  }
+
+  .edit-intro {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    line-height: 1.8;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: clamp(2rem, 3.5vw, 3.5rem);
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .edit-item {
+    background-color: var(--color-bg-darker);
+    border: 1px solid var(--color-border-subtle);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    text-decoration: none;
+    transition: transform 0.4s ease, border-color 0.4s ease;
+  }
+
+  .edit-item:hover {
+    transform: translateY(-4px);
+    border-color: rgba(197, 168, 108, 0.6);
+  }
+
+  .item-visual {
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background-color: #0b1d1b;
+  }
+
+  .item-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .edit-item:hover .item-visual img {
+    transform: scale(1.04);
+  }
+
+  .item-meta {
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .item-title {
+    font-size: 1.15rem;
+    letter-spacing: 0.12em;
+    color: var(--color-text-white);
+  }
+
+  .item-materials {
+    font-size: 0.95rem;
+    color: var(--color-gold);
+    white-space: pre-line;
+    line-height: 1.6;
+  }
+
+  .item-cta {
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-gold-light);
+    margin-top: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: transform 0.3s ease;
+  }
+
+  .edit-item:hover .item-cta {
+    transform: translateX(4px);
+    color: var(--color-gold);
+  }
+
+  @media (max-width: 768px) {
+    .the-edit-page {
+      padding: 5.5rem 1.25rem 3.5rem;
+    }
+    .gallery-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

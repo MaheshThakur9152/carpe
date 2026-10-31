@@ -83,22 +83,40 @@ import { heroSlides } from '../data/heroSlides';
       }
     });
 
-    // Touch swipe support
+    // Touch swipe support vs tap click
     let touchStartX = 0;
-    let touchEndX = 0;
+    let touchStartY = 0;
+    let isSwiping = false;
 
     container.addEventListener('touchstart', (e) => {
       touchStartX = (e as TouchEvent).changedTouches[0].screenX;
+      touchStartY = (e as TouchEvent).changedTouches[0].screenY;
+      isSwiping = false;
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (e) => {
+      const diffX = Math.abs((e as TouchEvent).changedTouches[0].screenX - touchStartX);
+      const diffY = Math.abs((e as TouchEvent).changedTouches[0].screenY - touchStartY);
+      if (diffX > 15 || diffY > 15) {
+        isSwiping = true;
+      }
     }, { passive: true });
 
     container.addEventListener('touchend', (e) => {
-      touchEndX = (e as TouchEvent).changedTouches[0].screenX;
+      const touchEndX = (e as TouchEvent).changedTouches[0].screenX;
       const diff = touchStartX - touchEndX;
       if (Math.abs(diff) > 40) {
         if (diff > 0) goToSlide(currentIndex + 1);
         else goToSlide(currentIndex - 1);
       }
     }, { passive: true });
+
+    container.addEventListener('click', (e) => {
+      if (isSwiping) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
   }
 
   if (document.readyState === 'loading') {

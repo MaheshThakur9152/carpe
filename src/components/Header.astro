@@ -1,5 +1,6 @@
 ---
 import Logo from './Logo.astro';
+import { navigationItems } from '../data/navigation';
 
 interface Props {
   variant?: 'light' | 'dark';
@@ -9,60 +10,21 @@ const { variant = 'light' } = Astro.props;
 ---
 <header class={`site-header ${variant}`}>
   <div class="header-inner">
-    <!-- Desktop Left Logo -->
-    <div class="header-left desktop-only">
+    <!-- Brand Logo -->
+    <div class="header-left">
       <Logo variant={variant} />
     </div>
 
-    <!-- Mobile Top Center Hamburger (Glenn Spiro style) -->
-    <div class="mobile-top-center mobile-only">
-      <button 
-        type="button" 
-        class="mobile-menu-trigger" 
-        aria-label="Open Atelier Details"
-        aria-expanded="false"
-        data-menu-trigger
-      >
-        <span class="menu-line"></span>
-        <span class="menu-line"></span>
-        <span class="menu-line"></span>
-      </button>
-    </div>
-
-    <!-- Desktop Right Info / Inquiries -->
-    <div class="header-right desktop-only">
-      <span class="header-atelier-note">High Jewellery Atelier · Bombay</span>
-    </div>
-  </div>
-
-  <!-- Fullscreen Luxury Atelier Overlay -->
-  <div class="mobile-menu-overlay" id="mobile-menu-overlay" aria-hidden="true">
-    <div class="mobile-menu-header">
-      <button 
-        type="button" 
-        class="mobile-menu-close" 
-        aria-label="Close Atelier Details"
-        data-menu-close
-      >
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      </button>
-    </div>
-
-    <div class="mobile-menu-body">
-      <span class="mobile-menu-eyebrow">Carpe Diam Bombay</span>
-      <h2 class="mobile-menu-title">High Jewellery Atelier</h2>
-      <p class="mobile-menu-desc">
-        Exceptional handcrafted high jewellery, uncut polki diamonds, carved gemstones and bespoke heirlooms in 14kt gold.
-      </p>
-      <div class="mobile-menu-contact">
-        <span class="contact-label">Private Viewings & Commissions</span>
-        <a href="mailto:concierge@carpediam.com" class="contact-email">concierge@carpediam.com</a>
-      </div>
-      <p class="mobile-menu-footer-note">Bombay · By Prior Appointment Only</p>
-    </div>
+    <!-- Navigation (Atelier, The Edit, Contact) -->
+    <nav class="header-right" aria-label="Main Navigation">
+      <ul class="nav-list">
+        {navigationItems.map(item => (
+          <li class="nav-item">
+            <a href={item.href} class="nav-link">{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
   </div>
 </header>
 
@@ -74,7 +36,8 @@ const { variant = 'light' } = Astro.props;
     width: 100%;
     z-index: 50;
     pointer-events: none;
-    padding: var(--spacing-header-y) var(--spacing-header-x);
+    padding: clamp(1.25rem, 3.5vh, 2.5rem) var(--spacing-header-x);
+    box-sizing: border-box;
   }
 
   .header-inner {
@@ -85,199 +48,85 @@ const { variant = 'light' } = Astro.props;
     pointer-events: auto;
   }
 
-  .desktop-only {
-    display: flex;
-  }
-
-  .mobile-only {
-    display: none;
-  }
-
   .header-left {
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
   }
 
   .header-right {
     flex-shrink: 0;
-  }
-
-  .header-atelier-note {
-    font-size: 0.9rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--color-gold);
-    opacity: 0.85;
-  }
-
-  /* Glenn Spiro style mobile top hamburger */
-  .mobile-top-center {
-    width: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding-top: 0.25rem;
   }
 
-  .mobile-menu-trigger {
-    background: transparent;
-    border: none;
-    cursor: pointer;
+  .nav-list {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 32px;
-    height: 14px;
+    list-style: none;
+    gap: clamp(1rem, 3vw, 3rem);
+    margin: 0;
     padding: 0;
-    z-index: 60;
-  }
-
-  .menu-line {
-    display: block;
-    width: 100%;
-    height: 1.2px;
-    background-color: #cbb27a;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-  }
-
-  /* Fullscreen Overlay */
-  .mobile-menu-overlay {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    background: radial-gradient(circle at center, #0a1f1b 0%, #030d0b 100%);
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s ease;
-    display: flex;
-    flex-direction: column;
-    padding: 2rem 1.75rem;
-    box-sizing: border-box;
-  }
-
-  .mobile-menu-overlay.is-open {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  .mobile-menu-header {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-  }
-
-  .mobile-menu-close {
-    background: transparent;
-    border: none;
-    color: #cbb27a;
-    cursor: pointer;
-    padding: 0.5rem;
-    display: flex;
     align-items: center;
-    justify-content: center;
+    flex-wrap: nowrap;
   }
 
-  .mobile-menu-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0 1rem;
+  .nav-item {
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
-  .mobile-menu-eyebrow {
-    font-size: 0.85rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: #cbb27a;
-    margin-bottom: 0.8rem;
-  }
-
-  .mobile-menu-title {
-    font-size: 1.8rem;
-    letter-spacing: 0.12em;
-    color: #f7f4ed;
-    margin-bottom: 1.5rem;
-  }
-
-  .mobile-menu-desc {
-    font-size: 1.05rem;
-    line-height: 1.7;
-    color: rgba(247, 244, 237, 0.75);
-    max-width: 320px;
-    margin-bottom: 2.5rem;
-  }
-
-  .mobile-menu-contact {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .contact-label {
-    font-size: 0.78rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #cbb27a;
-  }
-
-  .contact-email {
-    font-size: 1.05rem;
+  .nav-link {
+    font-family: var(--font-heading);
+    font-size: clamp(0.95rem, 2.4vw, 1.25rem);
+    font-weight: 400;
+    letter-spacing: 0.05em;
     color: #f7f4ed;
     text-decoration: none;
-    border-bottom: 1px solid rgba(203, 178, 122, 0.4);
-    padding-bottom: 2px;
+    transition: color 0.3s ease, opacity 0.3s ease;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0.25rem 0;
   }
 
-  .mobile-menu-footer-note {
-    font-size: 0.82rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: rgba(203, 178, 122, 0.6);
+  .nav-link:hover {
+    color: var(--color-gold);
+    opacity: 1;
   }
 
-  @media (max-width: 820px) {
-    .desktop-only {
-      display: none !important;
+  .site-header.dark .nav-link {
+    color: #1a1a1a;
+  }
+
+  .site-header.dark .nav-link:hover {
+    color: var(--color-gold);
+  }
+
+  @media (max-width: 640px) {
+    .site-header {
+      padding: 1.2rem 1.1rem;
     }
-    .mobile-only {
-      display: flex !important;
+
+    .nav-list {
+      gap: clamp(0.85rem, 3.2vw, 1.4rem);
+    }
+
+    .nav-link {
+      font-size: clamp(0.88rem, 3.8vw, 1.05rem);
+      letter-spacing: 0.03em;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .site-header {
+      padding: 1rem 0.85rem;
+    }
+
+    .nav-list {
+      gap: 0.65rem;
+    }
+
+    .nav-link {
+      font-size: 0.82rem;
     }
   }
 </style>
-
-<script>
-  function setupMobileMenu() {
-    const trigger = document.querySelector('[data-menu-trigger]');
-    const closeBtn = document.querySelector('[data-menu-close]');
-    const overlay = document.getElementById('mobile-menu-overlay');
-
-    if (!trigger || !closeBtn || !overlay) return;
-
-    function openMenu() {
-      overlay?.classList.add('is-open');
-      overlay?.setAttribute('aria-hidden', 'false');
-      trigger?.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeMenu() {
-      overlay?.classList.remove('is-open');
-      overlay?.setAttribute('aria-hidden', 'true');
-      trigger?.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    }
-
-    trigger.addEventListener('click', openMenu);
-    closeBtn.addEventListener('click', closeMenu);
-  }
-
-  setupMobileMenu();
-  document.addEventListener('astro:page-load', setupMobileMenu);
-</script>

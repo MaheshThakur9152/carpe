@@ -1,5 +1,6 @@
 ---
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import Preloader from '../components/Preloader.astro';
 import '../styles/global.css';
 
@@ -7,12 +8,14 @@ interface Props {
   title?: string;
   description?: string;
   headerVariant?: 'light' | 'dark';
+  showFooter?: boolean;
 }
 
 const {
   title = 'CARPE DIAM BOMBAY — High Jewellery Atelier',
   description = 'Carpe Diam Bombay. Exceptional handcrafted high jewellery, uncut polki diamonds, carved gemstones and bespoke heirlooms in 14kt gold.',
-  headerVariant = 'light'
+  headerVariant = 'light',
+  showFooter = true
 } = Astro.props;
 ---
 <!DOCTYPE html>
@@ -30,13 +33,12 @@ const {
     <main>
       <slot />
     </main>
+    {showFooter && <Footer />}
   </body>
 </html>
 
 <style>
   main {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
   }
 </style>
