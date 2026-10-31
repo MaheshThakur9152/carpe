@@ -51,7 +51,7 @@ const { variant = 'light' } = Astro.props;
         aria-label="Close Menu"
         data-menu-close
       >
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
           <line x1="18" y1="6" x2="6" y2="18" />
           <line x1="6" y1="6" x2="18" y2="18" />
         </svg>
@@ -59,14 +59,21 @@ const { variant = 'light' } = Astro.props;
     </div>
 
     <nav class="mobile-nav-body">
-      <span class="mobile-menu-eyebrow">Carpe Diam Bombay</span>
+      <a href="/" class="mobile-brand-link" aria-label="Go to Home Screen">
+        <span class="mobile-menu-eyebrow">Carpe Diam Bombay</span>
+      </a>
+
       <ul class="mobile-nav-list">
+        <li>
+          <a href="/" class="mobile-nav-link">Home</a>
+        </li>
         {navigationItems.map(item => (
           <li>
             <a href={item.href} class="mobile-nav-link">{item.label}</a>
           </li>
         ))}
       </ul>
+
       <p class="mobile-menu-footer-note">High Jewellery Atelier · Bombay</p>
     </nav>
   </div>
@@ -215,10 +222,10 @@ const { variant = 'light' } = Astro.props;
     height: 100dvh;
     background-color: rgba(6, 17, 15, 0.98);
     backdrop-filter: blur(16px);
-    z-index: 999;
+    z-index: 9999;
     display: flex;
     flex-direction: column;
-    padding: 1.5rem 1.5rem 2.5rem;
+    padding: max(1.2rem, env(safe-area-inset-top)) 1.5rem max(2rem, env(safe-area-inset-bottom));
     box-sizing: border-box;
     opacity: 0;
     visibility: hidden;
@@ -235,6 +242,7 @@ const { variant = 'light' } = Astro.props;
   .mobile-menu-header {
     display: flex;
     justify-content: flex-end;
+    width: 100%;
   }
 
   .mobile-menu-close {
@@ -247,6 +255,7 @@ const { variant = 'light' } = Astro.props;
     align-items: center;
     justify-content: center;
     touch-action: manipulation;
+    pointer-events: auto;
   }
 
   .mobile-nav-body {
@@ -257,6 +266,14 @@ const { variant = 'light' } = Astro.props;
     justify-content: center;
     text-align: center;
     gap: 2.2rem;
+    pointer-events: auto;
+  }
+
+  .mobile-brand-link {
+    text-decoration: none;
+    display: inline-block;
+    padding: 0.5rem;
+    cursor: pointer;
   }
 
   .mobile-menu-eyebrow {
@@ -264,6 +281,11 @@ const { variant = 'light' } = Astro.props;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: #cbb27a;
+    transition: opacity 0.3s ease;
+  }
+
+  .mobile-brand-link:hover .mobile-menu-eyebrow {
+    opacity: 0.8;
   }
 
   .mobile-nav-list {
@@ -273,6 +295,7 @@ const { variant = 'light' } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 1.8rem;
+    align-items: center;
   }
 
   .mobile-nav-link {
@@ -283,8 +306,9 @@ const { variant = 'light' } = Astro.props;
     text-decoration: none;
     transition: color 0.3s ease;
     display: inline-block;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.5rem;
     touch-action: manipulation;
+    cursor: pointer;
   }
 
   .mobile-nav-link:hover {
@@ -307,32 +331,29 @@ const { variant = 'light' } = Astro.props;
     if (!trigger || !overlay) return;
 
     function openMenu(e) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      overlay?.classList.add('is-active');
-      overlay?.setAttribute('aria-hidden', 'false');
-      trigger?.setAttribute('aria-expanded', 'true');
+      if (e) e.stopPropagation();
+      overlay.classList.add('is-active');
+      overlay.setAttribute('aria-hidden', 'false');
+      trigger.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
     }
 
     function closeMenu(e) {
-      if (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      overlay?.classList.remove('is-active');
-      overlay?.setAttribute('aria-hidden', 'true');
-      trigger?.setAttribute('aria-expanded', 'false');
+      if (e) e.stopPropagation();
+      overlay.classList.remove('is-active');
+      overlay.setAttribute('aria-hidden', 'true');
+      trigger.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
     }
 
     trigger.addEventListener('click', openMenu);
     closeBtn?.addEventListener('click', closeMenu);
 
-    overlay.querySelectorAll('.mobile-nav-link').forEach(link => {
-      link.addEventListener('click', closeMenu);
+    // Let navigation links navigate immediately without preventDefault
+    overlay.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.body.style.overflow = '';
+      });
     });
   }
 

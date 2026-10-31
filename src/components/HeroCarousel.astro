@@ -111,13 +111,6 @@ import { heroSlides } from '../data/heroSlides';
         else goToSlide(currentIndex - 1);
       }
     }, { passive: true });
-
-    container.addEventListener('click', (e) => {
-      if (isSwiping) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    }, true);
   }
 
   if (document.readyState === 'loading') {

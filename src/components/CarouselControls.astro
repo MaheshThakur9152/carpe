@@ -134,9 +134,14 @@ const { totalSlides = 9 } = Astro.props;
       position: static;
       top: auto;
       transform: none;
-      padding: 6px;
+      padding: 8px 14px;
+      min-width: 44px;
+      min-height: 44px;
       color: var(--color-gold);
-      opacity: 0.85;
+      opacity: 0.9;
+      pointer-events: auto;
+      touch-action: manipulation;
+      cursor: pointer;
     }
 
     .control-btn:hover {
