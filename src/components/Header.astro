@@ -164,7 +164,7 @@ const { variant = 'light' } = Astro.props;
     }
 
     .site-header {
-      padding: 1.25rem 1.5rem;
+      padding: max(1.1rem, env(safe-area-inset-top)) 1.5rem 0.5rem;
     }
 
     .header-inner {

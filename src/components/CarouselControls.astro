@@ -109,7 +109,7 @@ const { totalSlides = 9 } = Astro.props;
   @media (max-width: 768px) {
     .carousel-controls {
       top: auto;
-      bottom: clamp(0.8rem, 1.8vh, 1.3rem);
+      bottom: max(clamp(0.75rem, 2dvh, 1.25rem), env(safe-area-inset-bottom));
       left: 0;
       right: 0;
       height: 42px;
