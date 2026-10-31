@@ -1,7 +1,6 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import Preloader from '../components/Preloader.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -28,7 +27,6 @@ const {
     <title>{title}</title>
   </head>
   <body>
-    <Preloader />
     <Header variant={headerVariant} />
     <main>
       <slot />

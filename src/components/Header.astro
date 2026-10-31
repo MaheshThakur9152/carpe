@@ -10,13 +10,28 @@ const { variant = 'light' } = Astro.props;
 ---
 <header class={`site-header ${variant}`}>
   <div class="header-inner">
-    <!-- Brand Logo -->
-    <div class="header-left">
+    <!-- Desktop Left Logo -->
+    <div class="header-left desktop-only">
       <Logo variant={variant} />
     </div>
 
-    <!-- Navigation (Atelier, The Edit, Contact) -->
-    <nav class="header-right" aria-label="Main Navigation">
+    <!-- Mobile Top Center Hamburger (Glenn Spiro reference) -->
+    <div class="mobile-top-center mobile-only">
+      <button 
+        type="button" 
+        class="mobile-menu-trigger" 
+        aria-label="Open Navigation Menu"
+        aria-expanded="false"
+        data-menu-trigger
+      >
+        <span class="menu-line"></span>
+        <span class="menu-line"></span>
+        <span class="menu-line"></span>
+      </button>
+    </div>
+
+    <!-- Desktop Right Navigation -->
+    <nav class="header-right desktop-only" aria-label="Main Navigation">
       <ul class="nav-list">
         {navigationItems.map(item => (
           <li class="nav-item">
@@ -24,6 +39,35 @@ const { variant = 'light' } = Astro.props;
           </li>
         ))}
       </ul>
+    </nav>
+  </div>
+
+  <!-- Fullscreen Luxury Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay" aria-hidden="true">
+    <div class="mobile-menu-header">
+      <button 
+        type="button" 
+        class="mobile-menu-close" 
+        aria-label="Close Menu"
+        data-menu-close
+      >
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+
+    <nav class="mobile-nav-body">
+      <span class="mobile-menu-eyebrow">Carpe Diam Bombay</span>
+      <ul class="mobile-nav-list">
+        {navigationItems.map(item => (
+          <li>
+            <a href={item.href} class="mobile-nav-link">{item.label}</a>
+          </li>
+        ))}
+      </ul>
+      <p class="mobile-menu-footer-note">High Jewellery Atelier · Bombay</p>
     </nav>
   </div>
 </header>
@@ -46,6 +90,14 @@ const { variant = 'light' } = Astro.props;
     justify-content: space-between;
     align-items: center;
     pointer-events: auto;
+  }
+
+  .desktop-only {
+    display: flex;
+  }
+
+  .mobile-only {
+    display: none;
   }
 
   .header-left {
@@ -101,32 +153,174 @@ const { variant = 'light' } = Astro.props;
     color: var(--color-gold);
   }
 
-  @media (max-width: 640px) {
+  /* Mobile / Android: Glenn Spiro reference layout */
+  @media (max-width: 768px) {
+    .desktop-only {
+      display: none !important;
+    }
+
+    .mobile-only {
+      display: flex !important;
+    }
+
     .site-header {
-      padding: 1.2rem 1.1rem;
+      padding: 1.25rem 1.5rem;
     }
 
-    .nav-list {
-      gap: clamp(0.85rem, 3.2vw, 1.4rem);
+    .header-inner {
+      justify-content: center;
     }
 
-    .nav-link {
-      font-size: clamp(0.88rem, 3.8vw, 1.05rem);
-      letter-spacing: 0.03em;
+    .mobile-top-center {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .mobile-menu-trigger {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 32px;
+      height: 12px;
+      padding: 0;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    .menu-line {
+      display: block;
+      width: 100%;
+      height: 1.2px;
+      background-color: #cbb27a;
+      transition: transform 0.3s ease, opacity 0.3s ease;
     }
   }
 
-  @media (max-width: 380px) {
-    .site-header {
-      padding: 1rem 0.85rem;
-    }
+  /* Fullscreen mobile overlay */
+  .mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(6, 17, 15, 0.98);
+    backdrop-filter: blur(16px);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1.5rem 2.5rem;
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+  }
 
-    .nav-list {
-      gap: 0.65rem;
-    }
+  .mobile-menu-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
 
-    .nav-link {
-      font-size: 0.82rem;
-    }
+  .mobile-menu-header {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .mobile-menu-close {
+    background: transparent;
+    border: none;
+    color: #cbb27a;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-nav-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 2.2rem;
+  }
+
+  .mobile-menu-eyebrow {
+    font-size: 0.85rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #cbb27a;
+  }
+
+  .mobile-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+  }
+
+  .mobile-nav-link {
+    font-size: 1.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .mobile-nav-link:hover {
+    color: #cbb27a;
+  }
+
+  .mobile-menu-footer-note {
+    font-size: 0.85rem;
+    color: rgba(203, 178, 122, 0.7);
+    letter-spacing: 0.08em;
   }
 </style>
+
+<script>
+  function setupMobileMenu() {
+    const trigger = document.querySelector('[data-menu-trigger]');
+    const closeBtn = document.querySelector('[data-menu-close]');
+    const overlay = document.getElementById('mobile-menu-overlay');
+
+    if (!trigger || !overlay) return;
+
+    function openMenu() {
+      overlay?.classList.add('is-active');
+      overlay?.setAttribute('aria-hidden', 'false');
+      trigger?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      overlay?.classList.remove('is-active');
+      overlay?.setAttribute('aria-hidden', 'true');
+      trigger?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    trigger.addEventListener('click', openMenu);
+    closeBtn?.addEventListener('click', closeMenu);
+
+    overlay.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupMobileMenu);
+  } else {
+    setupMobileMenu();
+  }
+  document.addEventListener('astro:page-load', setupMobileMenu);
+</script>
