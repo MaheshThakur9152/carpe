@@ -44,7 +44,7 @@ import { heroSlides } from '../data/heroSlides';
 
 <script>
   function setupCarousel() {
-    const container = document.querySelector('.hero-carousel-container');
+    const container = document.querySelector('.hero-carousel-container') as HTMLElement | null;
     if (!container) return;
 
     const slides = container.querySelectorAll<HTMLElement>('.hero-slide');
@@ -84,10 +84,11 @@ import { heroSlides } from '../data/heroSlides';
       }
     });
 
-    // Touch swipe support vs tap click
+    // Touch swipe support with double-advance guard
     let touchStartX = 0;
     let touchStartY = 0;
     let isSwiping = false;
+    let lastSwipeTimestamp = 0;
 
     container.addEventListener('touchstart', (e) => {
       touchStartX = (e as TouchEvent).changedTouches[0].screenX;
@@ -98,7 +99,7 @@ import { heroSlides } from '../data/heroSlides';
     container.addEventListener('touchmove', (e) => {
       const diffX = Math.abs((e as TouchEvent).changedTouches[0].screenX - touchStartX);
       const diffY = Math.abs((e as TouchEvent).changedTouches[0].screenY - touchStartY);
-      if (diffX > 15 || diffY > 15) {
+      if (diffX > 10 || diffY > 10) {
         isSwiping = true;
       }
     }, { passive: true });
@@ -107,10 +108,67 @@ import { heroSlides } from '../data/heroSlides';
       const touchEndX = (e as TouchEvent).changedTouches[0].screenX;
       const diff = touchStartX - touchEndX;
       if (Math.abs(diff) > 40) {
+        isSwiping = true;
+        lastSwipeTimestamp = Date.now();
         if (diff > 0) goToSlide(currentIndex + 1);
         else goToSlide(currentIndex - 1);
       }
     }, { passive: true });
+
+    // Viewport-edge click navigation (Left 20% Prev / Right 20% Next / Center 60% None)
+    container.addEventListener('click', (e: MouseEvent) => {
+      // Guard against click dispatch after touch swipe
+      if (isSwiping || Date.now() - lastSwipeTimestamp < 350) {
+        return;
+      }
+
+      // Ignore interactive controls, links, hamburger, buttons
+      const target = e.target as HTMLElement | null;
+      if (target?.closest('button, a, .carousel-controls, [data-menu-trigger], [data-menu-close]')) {
+        return;
+      }
+
+      // Protect native browser back/forward edge gestures (16px margin)
+      if (e.clientX <= 16 || e.clientX >= window.innerWidth - 16) {
+        return;
+      }
+
+      const rect = container.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const ratio = clickX / rect.width;
+
+      if (ratio <= 0.20) {
+        goToSlide(currentIndex - 1);
+      } else if (ratio >= 0.80) {
+        goToSlide(currentIndex + 1);
+      }
+    });
+
+    // Subtle directional desktop cursor feedback (left 20% / right 20%)
+    if (window.matchMedia('(hover: hover)').matches) {
+      container.addEventListener('mousemove', (e: MouseEvent) => {
+        const target = e.target as HTMLElement | null;
+        if (target?.closest('button, a, .carousel-controls, [data-menu-trigger], [data-menu-close]')) {
+          container.style.cursor = '';
+          return;
+        }
+
+        const rect = container.getBoundingClientRect();
+        const ratio = (e.clientX - rect.left) / rect.width;
+
+        if (ratio <= 0.20) {
+          container.style.cursor = 'w-resize';
+        } else if (ratio >= 0.80) {
+          container.style.cursor = 'e-resize';
+        } else {
+          container.style.cursor = '';
+        }
+      });
+
+      container.addEventListener('mouseleave', () => {
+        container.style.cursor = '';
+      });
+    }
   }
 
   if (document.readyState === 'loading') {
@@ -118,4 +176,5 @@ import { heroSlides } from '../data/heroSlides';
   } else {
     setupCarousel();
   }
+  document.addEventListener('astro:page-load', setupCarousel);
 </script>
