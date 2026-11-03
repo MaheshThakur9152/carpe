@@ -104,6 +104,44 @@ import { heroSlides } from '../data/heroSlides';
     prevBtn?.addEventListener('click', () => goToSlide(currentIndex - 1));
     nextBtn?.addEventListener('click', () => goToSlide(currentIndex + 1));
 
+    // Desktop mouse wheel / trackpad scroll slide progression
+    let isWheelThrottled = false;
+    let wheelDeltaAccumulator = 0;
+    const wheelThreshold = 35;
+
+    function onWheel(e: WheelEvent) {
+      if (!document.contains(container)) return;
+
+      const overlay = document.getElementById('mobile-menu-overlay');
+      if (overlay?.classList.contains('is-active')) return;
+
+      if (isWheelThrottled) return;
+
+      wheelDeltaAccumulator += e.deltaY;
+
+      if (Math.abs(wheelDeltaAccumulator) >= wheelThreshold) {
+        if (wheelDeltaAccumulator > 0) {
+          goToSlide(currentIndex + 1);
+        } else {
+          goToSlide(currentIndex - 1);
+        }
+
+        wheelDeltaAccumulator = 0;
+        isWheelThrottled = true;
+
+        setTimeout(() => {
+          isWheelThrottled = false;
+          wheelDeltaAccumulator = 0;
+        }, 850);
+      }
+    }
+
+    if ((window as any).__cd_carousel_wheel) {
+      window.removeEventListener('wheel', (window as any).__cd_carousel_wheel);
+    }
+    (window as any).__cd_carousel_wheel = onWheel;
+    window.addEventListener('wheel', onWheel, { passive: true });
+
     // Keyboard navigation with single-listener guarantee
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === 'ArrowLeft') {
