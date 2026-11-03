@@ -1,0 +1,272 @@
+---
+---
+<!-- Fast check to suppress preloader on repeated internal navigation within session or reduced motion -->
+<script is:inline>
+  try {
+    if (sessionStorage.getItem('cd_preloader_seen') || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('cd-skip-preloader');
+    }
+  } catch (e) {}
+</script>
+
+<div class="site-preloader" id="site-preloader" aria-label="Loading CARPE DIAM BOMBAY" role="status">
+  <!-- Extended atmospheric emerald backdrop: zero black edges on any screen -->
+  <div class="preloader-backdrop-atmosphere" aria-hidden="true">
+    <div class="preloader-backdrop-ambient">
+      <img
+        src="/images/carpediam-loader-poster.webp"
+        alt=""
+        class="preloader-backdrop-poster"
+        loading="eager"
+        decoding="async"
+      />
+    </div>
+    <div class="preloader-radial-illumination"></div>
+    <div class="preloader-stardust"></div>
+  </div>
+  
+  <!-- Foreground crisp, undistorted 16:9 video container -->
+  <div class="preloader-video-container">
+    <video
+      id="preloader-video"
+      class="preloader-video"
+      autoplay
+      muted
+      playsinline
+      poster="/images/carpediam-loader-poster.webp"
+      preload="auto"
+      aria-label="CARPE DIAM BOMBAY logo animation"
+    >
+      <source src="/videos/carpediam-loader.webm" type="video/webm" />
+      <source src="/videos/carpediam-loader.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <button
+    type="button"
+    class="preloader-skip-btn"
+    id="preloader-skip-btn"
+    aria-label="Skip animation"
+  >
+    Skip
+  </button>
+</div>
+
+<style>
+  :global(html.cd-skip-preloader) #site-preloader {
+    display: none !important;
+  }
+
+  .site-preloader {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #06251f;
+    background: radial-gradient(ellipse at 50% 50%, #0c352c 0%, #06251f 55%, #031410 100%);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    pointer-events: auto;
+    transition: opacity 0.85s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.85s ease;
+  }
+
+  .preloader-backdrop-atmosphere {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .preloader-backdrop-ambient {
+    position: absolute;
+    inset: -20%;
+    width: 140%;
+    height: 140%;
+    filter: blur(50px) brightness(0.68) saturate(1.2);
+    transform: scale(1.1);
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  .preloader-backdrop-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .preloader-radial-illumination {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse 85% 65% at 50% 50%,
+      rgba(12, 53, 44, 0.6) 0%,
+      rgba(6, 37, 31, 0.4) 50%,
+      rgba(3, 20, 16, 0.85) 100%
+    );
+  }
+
+  .preloader-stardust {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.045;
+    background-image: radial-gradient(#cbb27a 0.75px, transparent 0.75px);
+    background-size: 24px 24px;
+  }
+
+  .site-preloader.is-loaded {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .preloader-video-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: min(100vw, calc(100vh * 16 / 9));
+    height: min(100vh, calc(100vw * 9 / 16));
+    aspect-ratio: 16 / 9;
+    box-sizing: border-box;
+  }
+
+  .preloader-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    background: transparent;
+    /* Softly feather vertical outer bounds into the emerald backdrop */
+    mask-image: linear-gradient(to bottom, transparent 0%, black 2.5%, black 97.5%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 2.5%, black 97.5%, transparent 100%);
+  }
+
+  .preloader-skip-btn {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    background: none;
+    border: none;
+    color: rgba(203, 178, 122, 0.65);
+    font-family: inherit;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    transition: opacity 0.3s ease, color 0.3s ease;
+    z-index: 10;
+  }
+
+  .preloader-skip-btn:hover {
+    color: #f7ebd0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html) #site-preloader {
+      display: none !important;
+    }
+    .site-preloader {
+      display: none !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .preloader-skip-btn {
+      bottom: 1.25rem;
+      right: 1.25rem;
+      font-size: 0.7rem;
+    }
+  }
+</style>
+
+<script>
+  function initPreloader() {
+    const preloader = document.getElementById('site-preloader');
+    if (!preloader) return;
+
+    const video = document.getElementById('preloader-video') as HTMLVideoElement | null;
+    const skipBtn = document.getElementById('preloader-skip-btn');
+
+    // Fast-path: reduced motion or session already visited
+    const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let alreadySeen = false;
+    try {
+      alreadySeen = !!sessionStorage.getItem('cd_preloader_seen');
+    } catch (e) {}
+
+    if (alreadySeen || isReduced) {
+      try {
+        sessionStorage.setItem('cd_preloader_seen', '1');
+      } catch (e) {}
+      preloader.style.display = 'none';
+      return;
+    }
+
+    let dismissed = false;
+
+    function dismiss() {
+      if (dismissed) return;
+      dismissed = true;
+      clearTimeout(safetyTimeout);
+
+      try {
+        sessionStorage.setItem('cd_preloader_seen', '1');
+      } catch (e) {}
+
+      preloader.classList.add('is-loaded');
+
+      try {
+        if (video && !video.paused) {
+          video.pause();
+        }
+      } catch (e) {}
+
+      setTimeout(() => {
+        preloader.style.display = 'none';
+      }, 850);
+    }
+
+    // Safety fallback: video is ~7.93s; 9.5s timeout ensures user is never trapped
+    const safetyTimeout = setTimeout(dismiss, 9500);
+
+    if (skipBtn) {
+      skipBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dismiss();
+      });
+    }
+
+    if (!video) {
+      setTimeout(dismiss, 1500);
+      return;
+    }
+
+    // Play once, reveal homepage after successful playback
+    video.addEventListener('ended', dismiss, { once: true });
+    video.addEventListener('error', dismiss, { once: true });
+
+    // Autoplay initiation with fallback rejection catch
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // Autoplay prevented or failed -> dismiss to reveal site
+        dismiss();
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPreloader);
+  } else {
+    initPreloader();
+  }
+</script>

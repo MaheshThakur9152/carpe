@@ -81,7 +81,7 @@ const { variant = 'light' } = Astro.props;
 
 <style>
   .site-header {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -89,6 +89,16 @@ const { variant = 'light' } = Astro.props;
     pointer-events: none;
     padding: clamp(1.25rem, 3.5vh, 2.5rem) var(--spacing-header-x);
     box-sizing: border-box;
+    transition: padding 0.4s var(--ease-luxury), background-color 0.4s var(--ease-luxury), border-color 0.4s var(--ease-luxury), backdrop-filter 0.4s var(--ease-luxury);
+    border-bottom: 1px solid transparent;
+  }
+
+  .site-header.is-scrolled {
+    padding: clamp(0.85rem, 2vh, 1.25rem) var(--spacing-header-x);
+    background-color: rgba(6, 17, 15, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(197, 168, 108, 0.18);
   }
 
   .header-inner {
@@ -122,7 +132,7 @@ const { variant = 'light' } = Astro.props;
   .nav-list {
     display: flex;
     list-style: none;
-    gap: clamp(1rem, 3vw, 3rem);
+    gap: clamp(1.5rem, 3.2vw, 3.5rem);
     margin: 0;
     padding: 0;
     align-items: center;
@@ -135,21 +145,39 @@ const { variant = 'light' } = Astro.props;
   }
 
   .nav-link {
-    font-family: var(--font-heading);
-    font-size: clamp(0.95rem, 2.4vw, 1.25rem);
+    font-family: var(--font-primary);
+    font-size: clamp(0.95rem, 1.1vw, 1.15rem);
     font-weight: 400;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     color: #f7f4ed;
     text-decoration: none;
-    transition: color 0.3s ease, opacity 0.3s ease;
+    transition: color 0.3s var(--ease-luxury);
     cursor: pointer;
     display: inline-block;
-    padding: 0.25rem 0;
+    padding: 0.3rem 0;
+    position: relative;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.35s var(--ease-luxury);
   }
 
   .nav-link:hover {
     color: var(--color-gold);
-    opacity: 1;
+  }
+
+  .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left center;
   }
 
   .site-header.dark .nav-link {
@@ -337,6 +365,7 @@ const { variant = 'light' } = Astro.props;
       overlay.setAttribute('aria-hidden', 'false');
       trigger.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
+      (closeBtn as HTMLElement | null)?.focus();
     }
 
     function closeMenu(e) {
@@ -345,14 +374,24 @@ const { variant = 'light' } = Astro.props;
       overlay.setAttribute('aria-hidden', 'true');
       trigger.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
+      trigger.focus();
     }
 
     trigger.addEventListener('click', openMenu);
     closeBtn?.addEventListener('click', closeMenu);
 
-    // Let navigation links navigate immediately without preventDefault
+    window.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && overlay.classList.contains('is-active')) {
+        closeMenu(e);
+      }
+    });
+
+    // Let navigation links navigate immediately without preventDefault, closing overlay
     overlay.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
+        overlay.classList.remove('is-active');
+        overlay.setAttribute('aria-hidden', 'true');
+        trigger.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
       });
     });

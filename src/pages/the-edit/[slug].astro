@@ -17,7 +17,7 @@ interface Props {
 const { product } = Astro.props;
 const details = product.details;
 
-// Other creations for related section
+// Other creations for complementary editorial gallery
 const otherProducts = heroSlides
   .filter(s => Boolean(s.slug && s.title && s.slug !== product.slug))
   .slice(0, 3);
@@ -27,49 +27,74 @@ const otherProducts = heroSlides
     <div class="product-container">
       <nav class="breadcrumb-nav">
         <a href="/the-edit" class="back-link">
-          <svg width="24" height="14" viewBox="0 0 24 14" fill="none" class="back-arrow">
+          <svg width="22" height="12" viewBox="0 0 24 14" fill="none" class="back-arrow" aria-hidden="true">
             <line x1="24" y1="7" x2="2" y2="7" stroke="currentColor" stroke-width="1.2" />
             <polyline points="8 1 2 7 8 13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
-          The Edit
+          <span>The Edit</span>
         </a>
       </nav>
 
+      <!-- Desktop 2-Column Editorial Composition -->
       <div class="product-hero-grid">
-        <div class="product-visual-wrapper">
-          <img src={product.image} alt={product.alt} class="product-visual" />
+        <!-- Sticky Luxury Artwork Presentation -->
+        <div class="product-visual-column">
+          <div 
+            class="product-visual-wrapper cinematic-image-wrapper" 
+            data-reveal-image 
+            data-parallax-image
+          >
+            <img 
+              src={product.image} 
+              alt={product.alt} 
+              class="product-visual" 
+              loading="eager"
+              fetchpriority="high"
+            />
+          </div>
         </div>
 
-        <div class="product-info-column">
+        <!-- Editorial Description & Craft Column -->
+        <div class="product-info-column stagger-text-group" data-reveal-text-group>
           <div class="product-header">
-            <span class="collection-badge">Carpe Diam Bombay · High Jewellery</span>
-            <h1 class="pdp-title">{product.title}</h1>
-            {product.description && <p class="pdp-materials">{product.description}</p>}
+            <span class="collection-badge editorial-reveal-item" data-reveal-item>
+              Carpe Diam Bombay · High Jewellery
+            </span>
+            <h1 class="pdp-title editorial-reveal-item" data-reveal-item>
+              {product.title}
+            </h1>
+            {product.description && (
+              <p class="pdp-materials editorial-reveal-item" data-reveal-item>
+                {product.description}
+              </p>
+            )}
           </div>
 
+          <div class="fine-divider editorial-reveal-item" data-reveal-item></div>
+
           {details && (
-            <div class="product-narrative">
+            <div class="product-narrative editorial-reveal-item" data-reveal-item>
               <p>{details.description}</p>
             </div>
           )}
 
           {details && (
-            <div class="specifications-box">
-              <h2 class="specs-heading">Creation Details</h2>
-              <dl class="specs-list">
-                <div class="spec-row">
+            <div class="craft-editorial-section editorial-reveal-item" data-reveal-item>
+              <h2 class="craft-eyebrow">The Craft</h2>
+              <dl class="specs-editorial-list">
+                <div class="spec-editorial-row editorial-reveal-item" data-reveal-item>
                   <dt>Gold</dt>
                   <dd>{details.gold}</dd>
                 </div>
-                <div class="spec-row">
+                <div class="spec-editorial-row editorial-reveal-item" data-reveal-item>
                   <dt>Gemstones</dt>
                   <dd>{details.gemstones}</dd>
                 </div>
-                <div class="spec-row">
+                <div class="spec-editorial-row editorial-reveal-item" data-reveal-item>
                   <dt>Diamonds</dt>
                   <dd>{details.diamonds}</dd>
                 </div>
-                <div class="spec-row">
+                <div class="spec-editorial-row editorial-reveal-item" data-reveal-item>
                   <dt>Provenance</dt>
                   <dd>{details.origin}</dd>
                 </div>
@@ -77,7 +102,7 @@ const otherProducts = heroSlides
             </div>
           )}
 
-          <div class="action-section">
+          <div class="action-editorial-section editorial-reveal-item" data-reveal-item>
             <a href={`/contact?inquiry=${product.slug}`} class="inquiry-btn">
               Request Private Viewing
             </a>
@@ -88,21 +113,23 @@ const otherProducts = heroSlides
         </div>
       </div>
 
+      <!-- Complementary Creations Editorial Gallery -->
       {otherProducts.length > 0 && (
-        <section class="related-section">
-          <div class="related-header">
+        <section class="complementary-section editorial-section-reveal" data-reveal-section>
+          <div class="complementary-header">
             <span class="eyebrow">High Jewellery</span>
-            <h2>Complementary Creations</h2>
+            <h2 class="complementary-title">Complementary Creations</h2>
           </div>
-          <div class="related-grid">
+          <div class="complementary-grid" data-editorial-gallery>
             {otherProducts.map((item) => (
-              <a href={`/the-edit/${item.slug}`} class="related-card">
-                <div class="related-thumb">
+              <a href={`/the-edit/${item.slug}`} class="complementary-item editorial-gallery-item">
+                <div class="item-visual-mask cinematic-image-wrapper" data-reveal-image>
                   <img src={item.image} alt={item.alt} loading="lazy" />
                 </div>
-                <div class="related-meta">
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
+                <div class="item-editorial-meta">
+                  <h3 class="item-editorial-title">{item.title}</h3>
+                  {item.description && <p class="item-editorial-materials">{item.description}</p>}
+                  <span class="item-editorial-link">Discover Creation →</span>
                 </div>
               </a>
             ))}
@@ -115,49 +142,56 @@ const otherProducts = heroSlides
 
 <style>
   .product-page {
-    padding: clamp(6.5rem, 11vh, 9rem) var(--spacing-header-x) clamp(4rem, 8vw, 7rem);
+    padding: clamp(6.5rem, 11vh, 9.5rem) var(--spacing-header-x) clamp(4rem, 8vw, 7.5rem);
     background-color: var(--color-bg-dark);
+    min-height: 100vh;
   }
 
   .product-container {
-    max-width: 1300px;
+    max-width: 1360px;
     margin: 0 auto;
   }
 
   .breadcrumb-nav {
-    margin-bottom: clamp(1.5rem, 3vh, 2.5rem);
+    margin-bottom: clamp(1.8rem, 3.5vh, 2.8rem);
   }
 
   .back-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.65rem;
     font-size: 0.95rem;
     letter-spacing: 0.08em;
     color: var(--color-gold);
-    transition: color 0.3s ease, transform 0.2s ease;
+    transition: color 0.3s var(--ease-luxury), transform 0.25s var(--ease-luxury);
   }
 
   .back-link:hover {
     color: var(--color-gold-light);
-    transform: translateX(-3px);
+    transform: translateX(-4px);
   }
 
   .product-hero-grid {
     display: grid;
     grid-template-columns: 1.15fr 1fr;
-    gap: clamp(2.5rem, 5vw, 5rem);
+    gap: clamp(3rem, 6vw, 6rem);
     align-items: start;
-    border-bottom: 1px solid var(--color-border-subtle);
-    padding-bottom: clamp(3.5rem, 6vw, 5.5rem);
+    border-bottom: 1px solid var(--color-border-fine);
+    padding-bottom: clamp(4rem, 7vw, 6rem);
+    position: relative;
+  }
+
+  /* Sticky Left Column */
+  .product-visual-column {
+    position: sticky;
+    top: 6.5rem;
   }
 
   .product-visual-wrapper {
     background-color: var(--color-bg-darker);
     border: 1px solid var(--color-border-subtle);
     overflow: hidden;
-    position: sticky;
-    top: 6rem;
+    position: relative;
   }
 
   .product-visual {
@@ -166,95 +200,117 @@ const otherProducts = heroSlides
     aspect-ratio: 16/9;
     object-fit: cover;
     display: block;
-    transition: transform 0.6s ease;
+    user-select: none;
   }
 
   .product-visual-wrapper:hover .product-visual {
-    transform: scale(1.03);
+    transform: scale(1.025);
   }
 
+  /* Right Column Editorial Content */
   .product-info-column {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.8rem;
+    padding-top: 0.5rem;
   }
 
   .collection-badge {
     font-size: 0.85rem;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--color-gold);
     display: block;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.85rem;
   }
 
   .pdp-title {
-    font-size: clamp(1.8rem, 3.2vw, 2.8rem);
-    letter-spacing: 0.1em;
+    font-size: clamp(2rem, 3.4vw, 3rem);
+    letter-spacing: 0.08em;
+    line-height: 1.2;
     color: var(--color-text-white);
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.75rem;
   }
 
   .pdp-materials {
-    font-size: 1.15rem;
-    color: var(--color-gold);
+    font-size: clamp(1.05rem, 1.25vw, 1.25rem);
+    color: var(--color-gold-light);
     white-space: pre-line;
-    line-height: 1.5;
+    line-height: 1.6;
+    letter-spacing: 0.03em;
+  }
+
+  .fine-divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-border-fine);
+    margin: 0.2rem 0;
   }
 
   .product-narrative p {
-    font-size: 1.15rem;
+    font-size: clamp(1.05rem, 1.15vw, 1.2rem);
     color: var(--color-text-muted);
     line-height: 1.85;
+    letter-spacing: 0.02em;
   }
 
-  .specifications-box {
-    background-color: var(--color-bg-darker);
-    border: 1px solid var(--color-border-subtle);
-    padding: clamp(1.5rem, 3vw, 2.2rem);
-  }
-
-  .specs-heading {
-    font-size: 1.15rem;
-    letter-spacing: 0.12em;
-    color: var(--color-gold-light);
-    margin-bottom: 1.25rem;
-    border-bottom: 1px solid rgba(197, 168, 108, 0.15);
-    padding-bottom: 0.6rem;
-  }
-
-  .specs-list {
+  /* Minimal Craft Specs with Delicate Dividers */
+  .craft-editorial-section {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.2rem;
+    margin-top: 0.4rem;
+  }
+
+  .craft-eyebrow {
+    font-size: 0.92rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-bottom: 0.4rem;
+  }
+
+  .specs-editorial-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
     margin: 0;
   }
 
-  .spec-row {
+  .spec-editorial-row {
     display: grid;
     grid-template-columns: 110px 1fr;
-    gap: 1rem;
-    font-size: 1rem;
+    gap: 1.2rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid rgba(197, 168, 108, 0.12);
+    align-items: baseline;
   }
 
-  .spec-row dt {
+  .spec-editorial-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .spec-editorial-row dt {
     color: var(--color-gold);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
   }
 
-  .spec-row dd {
+  .spec-editorial-row dd {
     color: var(--color-text-muted);
     margin: 0;
     line-height: 1.6;
+    font-size: 0.98rem;
   }
 
-  .action-section {
+  /* Action Section */
+  .action-editorial-section {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-top: 0.5rem;
+    gap: 1.1rem;
+    margin-top: 0.8rem;
   }
 
   .inquiry-btn {
@@ -262,109 +318,151 @@ const otherProducts = heroSlides
     text-align: center;
     background-color: var(--color-gold);
     color: #06110f;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
+    font-size: 0.98rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    padding: 1.1rem 2.2rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    padding: 1.15rem 2.4rem;
+    transition: background-color 0.35s var(--ease-luxury), transform 0.25s var(--ease-luxury), box-shadow 0.35s var(--ease-luxury);
     text-decoration: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   }
 
   .inquiry-btn:hover {
     background-color: var(--color-gold-light);
     transform: translateY(-2px);
+    box-shadow: 0 6px 26px rgba(197, 168, 108, 0.25);
   }
 
   .service-note {
-    font-size: 0.9rem;
+    font-size: 0.86rem;
     color: rgba(255, 255, 255, 0.45);
     text-align: center;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
   }
 
-  .related-section {
-    padding-top: clamp(3.5rem, 6vw, 5.5rem);
+  /* Complementary Creations Editorial Gallery */
+  .complementary-section {
+    padding-top: clamp(4rem, 7vw, 6.5rem);
   }
 
-  .related-header {
+  .complementary-header {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
   }
 
-  .related-header .eyebrow {
+  .complementary-header .eyebrow {
     display: block;
-    font-size: 0.9rem;
-    letter-spacing: 0.18em;
+    font-size: 0.88rem;
+    letter-spacing: 0.2em;
     color: var(--color-gold);
     margin-bottom: 0.6rem;
+    text-transform: uppercase;
   }
 
-  .related-header h2 {
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
+  .complementary-title {
+    font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+    letter-spacing: 0.08em;
     color: var(--color-text-white);
   }
 
-  .related-grid {
+  .complementary-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(2rem, 3.5vw, 3.5rem);
   }
 
-  .related-card {
-    background-color: var(--color-bg-darker);
-    border: 1px solid var(--color-border-subtle);
-    overflow: hidden;
+  .complementary-item {
+    display: flex;
+    flex-direction: column;
     text-decoration: none;
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    overflow: hidden;
+    transition: transform 0.4s var(--ease-luxury);
   }
 
-  .related-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(197, 168, 108, 0.5);
-  }
-
-  .related-thumb {
+  .item-visual-mask {
     aspect-ratio: 16/9;
     overflow: hidden;
+    background-color: var(--color-bg-darker);
+    border: 1px solid var(--color-border-subtle);
   }
 
-  .related-thumb img {
+  .item-visual-mask img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.7s var(--ease-luxury);
   }
 
-  .related-meta {
-    padding: 1.4rem;
+  .complementary-item:hover .item-visual-mask img {
+    transform: scale(1.04);
   }
 
-  .related-meta h3 {
-    font-size: 1.05rem;
+  .item-editorial-meta {
+    padding: 1.4rem 0.2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .item-editorial-title {
+    font-size: 1.15rem;
     letter-spacing: 0.1em;
     color: var(--color-text-white);
-    margin-bottom: 0.4rem;
+    transition: color 0.3s ease;
   }
 
-  .related-meta p {
-    font-size: 0.9rem;
+  .complementary-item:hover .item-editorial-title {
     color: var(--color-gold);
-    line-height: 1.5;
   }
 
-  @media (max-width: 860px) {
+  .item-editorial-materials {
+    font-size: 0.94rem;
+    color: var(--color-gold-light);
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    white-space: pre-line;
+  }
+
+  .item-editorial-link {
+    font-size: 0.88rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin-top: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: transform 0.3s var(--ease-luxury), color 0.3s ease;
+  }
+
+  .complementary-item:hover .item-editorial-link {
+    transform: translateX(4px);
+    color: var(--color-gold-light);
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 900px) {
     .product-page {
       padding: 5.5rem 1.25rem 3.5rem;
     }
+
     .product-hero-grid {
       grid-template-columns: 1fr;
-      gap: 2rem;
+      gap: 2.5rem;
     }
-    .product-visual-wrapper {
+
+    .product-visual-column {
       position: static;
     }
-    .spec-row {
-      grid-template-columns: 90px 1fr;
+
+    .spec-editorial-row {
+      grid-template-columns: 95px 1fr;
+    }
+
+    .complementary-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
     }
   }
 </style>

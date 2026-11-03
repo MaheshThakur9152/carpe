@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Preloader from '../components/Preloader.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -37,21 +38,34 @@ const {
       crossorigin 
     />
     {isHome && (
-      <link 
-        rel="preload" 
-        href="/Homepage-1.webp" 
-        as="image" 
-        type="image/webp" 
-        fetchpriority="high" 
-      />
+      <>
+        <link 
+          rel="preload" 
+          href="/Homepage-1.avif" 
+          as="image" 
+          type="image/avif" 
+          fetchpriority="high" 
+        />
+        <link
+          rel="preload"
+          href="/images/carpediam-loader-poster.webp"
+          as="image"
+          type="image/webp"
+          fetchpriority="high"
+        />
+      </>
     )}
   </head>
   <body class={isHome ? 'is-home-page' : ''}>
+    <Preloader />
+    {!isHome && <div class="scroll-progress-line" aria-hidden="true" />}
     <Header variant={headerVariant} />
     <main class={isHome ? 'is-home-main' : ''}>
       <slot />
     </main>
     {showFooter && <Footer />}
+
+    <script src="../components/animations/index.ts"></script>
   </body>
 </html>
 

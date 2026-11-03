@@ -104,14 +104,20 @@ import { heroSlides } from '../data/heroSlides';
     prevBtn?.addEventListener('click', () => goToSlide(currentIndex - 1));
     nextBtn?.addEventListener('click', () => goToSlide(currentIndex + 1));
 
-    // Keyboard navigation
-    window.addEventListener('keydown', (e) => {
+    // Keyboard navigation with single-listener guarantee
+    function onKeyDown(e: KeyboardEvent) {
       if (e.key === 'ArrowLeft') {
         goToSlide(currentIndex - 1);
       } else if (e.key === 'ArrowRight') {
         goToSlide(currentIndex + 1);
       }
-    });
+    }
+
+    if ((window as any).__cd_carousel_keydown) {
+      window.removeEventListener('keydown', (window as any).__cd_carousel_keydown);
+    }
+    (window as any).__cd_carousel_keydown = onKeyDown;
+    window.addEventListener('keydown', onKeyDown);
 
     // Touch swipe support with double-advance guard
     let touchStartX = 0;
@@ -153,9 +159,9 @@ import { heroSlides } from '../data/heroSlides';
         return;
       }
 
-      // Ignore interactive controls, links, hamburger, buttons
+      // Ignore interactive controls, links, slide content text, hamburger, buttons
       const target = e.target as HTMLElement | null;
-      if (target?.closest('button, a, .carousel-controls, [data-menu-trigger], [data-menu-close]')) {
+      if (target?.closest('button, a, .slide-content, .carousel-controls, [data-menu-trigger], [data-menu-close]')) {
         return;
       }
 

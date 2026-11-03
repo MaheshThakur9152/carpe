@@ -60,7 +60,7 @@ const isCritical = index === 0;
     height: 100%;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+    transition: opacity 0.85s var(--ease-luxury), visibility 0.85s var(--ease-luxury);
     pointer-events: none;
     overflow: hidden;
   }
@@ -78,6 +78,7 @@ const isCritical = index === 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
+    overflow: hidden;
   }
 
   .slide-artwork {
@@ -86,6 +87,12 @@ const isCritical = index === 0;
     object-fit: cover;
     object-position: center center;
     user-select: none;
+    transform: scale(1.03);
+    transition: transform 1.25s var(--ease-luxury);
+  }
+
+  .hero-slide.is-active .slide-artwork {
+    transform: scale(1);
   }
 
   /* Centered brand statement (Slide 1) */

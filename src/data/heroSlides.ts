@@ -19,7 +19,7 @@ export interface HeroSlideData {
 export const heroSlides: HeroSlideData[] = [
   {
     id: 1,
-    image: '/Homepage-1.webp',
+    image: '/Homepage-1.avif',
     alt: 'The World of Carpe Diam',
     statement: 'A closer look at the world of Carpe Diam,\nits inspirations, latest creations and the\npeople and process behind the pieces.',
     position: 'center'
@@ -27,7 +27,7 @@ export const heroSlides: HeroSlideData[] = [
   {
     id: 2,
     slug: 'the-meher-necklace',
-    image: '/Homepage-2.webp',
+    image: '/Homepage-2.avif',
     alt: 'The Meher Necklace',
     title: 'THE MEHER NECKLACE',
     description: 'Emerald, pearls, diamonds,\nonyx in 14kt Gold',
@@ -43,7 +43,7 @@ export const heroSlides: HeroSlideData[] = [
   {
     id: 3,
     slug: 'polki-fresco-earrings',
-    image: '/Homepage-3.webp',
+    image: '/Homepage-3.avif',
     alt: 'Polki Fresco Earrings',
     title: 'POLKI FRESCO EARRINGS',
     description: 'Uncut diamonds, diamonds,\nenamel work in 14kt gold',
@@ -59,7 +59,7 @@ export const heroSlides: HeroSlideData[] = [
   {
     id: 4,
     slug: 'meher-pearl-earrings',
-    image: '/Homepage-4.webp',
+    image: '/Homepage-4.avif',
     alt: 'Meher Pearl Earrings',
     title: 'MEHER PEARL EARRINGS',
     description: 'Emerald, ruby, pearls,\ndiamonds, onyx in 14kt Gold',
@@ -75,7 +75,7 @@ export const heroSlides: HeroSlideData[] = [
   {
     id: 5,
     slug: 'florence-ring',
-    image: '/Homepage-5.webp',
+    image: '/Homepage-5.avif',
     alt: 'Florence Ring',
     title: 'FLORENCE RING',
     description: 'Carved tanzanite, ruby,\ndiamonds in 14kt Gold',
@@ -91,7 +91,7 @@ export const heroSlides: HeroSlideData[] = [
   {
     id: 6,
     slug: 'emerald-saber-pendant',
-    image: '/Homepage-6.webp',
+    image: '/Homepage-6.avif',
     alt: 'Emerald Saber Pendant',
     title: 'EMERALD SABER PENDANT',
     description: 'Emerald, ruby, diamonds,\nonyx in 14kt Gold',
@@ -107,7 +107,7 @@ export const heroSlides: HeroSlideData[] = [
   {
     id: 7,
     slug: 'the-gajratna-kada',
-    image: '/Homepage-7.webp',
+    image: '/Homepage-7.avif',
     alt: 'The Gajratna Kada',
     title: 'THE GAJRATNA KADA',
     description: 'Uncut diamonds, ruby, emerald,\ndiamonds in 14kt Gold',
@@ -123,7 +123,7 @@ export const heroSlides: HeroSlideData[] = [
   {
     id: 8,
     slug: 'rosette-polki-studs',
-    image: '/Homepage-8.webp',
+    image: '/Homepage-8.avif',
     alt: 'Rosette Polki Studs',
     title: 'ROSETTE POLKI STUDS',
     description: 'Uncut diamonds,\ndiamonds in 14kt Gold',
@@ -139,7 +139,7 @@ export const heroSlides: HeroSlideData[] = [
   {
     id: 9,
     slug: 'bee-tanzanite-earrings',
-    image: '/Homepage-9.webp',
+    image: '/Homepage-9.avif',
     alt: 'Bee Tanzanite Earrings',
     title: 'BEE TANZANITE EARRINGS',
     description: 'Carved tanzanite, ruby,\ndiamonds in 14kt Gold',

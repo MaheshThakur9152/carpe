@@ -6,19 +6,19 @@ const products = heroSlides.filter(s => Boolean(s.slug && s.title));
 ---
 <BaseLayout title="The Edit — CARPE DIAM BOMBAY">
   <div class="the-edit-page">
-    <header class="edit-header">
-      <span class="eyebrow">Curated Collection</span>
-      <h1>The Edit</h1>
-      <p class="edit-intro">
+    <header class="edit-header stagger-text-group" data-reveal-text-group>
+      <span class="eyebrow editorial-reveal-item" data-reveal-item>Curated Collection</span>
+      <h1 class="editorial-reveal-item" data-reveal-item>The Edit</h1>
+      <p class="edit-intro editorial-reveal-item" data-reveal-item>
         An assemblage of fine jewellery, bespoke heirlooms and botanical high creations handcrafted in 14kt gold.
       </p>
     </header>
 
-    <div class="edit-gallery">
-      <div class="gallery-grid">
+    <div class="edit-gallery editorial-section-reveal" data-reveal-section>
+      <div class="gallery-grid" data-editorial-gallery>
         {products.map((item) => (
-          <a href={`/the-edit/${item.slug}`} class="edit-item">
-            <div class="item-visual">
+          <a href={`/the-edit/${item.slug}`} class="edit-item editorial-gallery-item">
+            <div class="item-visual cinematic-image-wrapper" data-reveal-image>
               <img src={item.image} alt={item.alt} loading="lazy" />
             </div>
             <div class="item-meta">
@@ -37,17 +37,18 @@ const products = heroSlides.filter(s => Boolean(s.slug && s.title));
   .the-edit-page {
     padding: clamp(7rem, 12vh, 10rem) var(--spacing-header-x) clamp(4rem, 8vw, 7rem);
     background-color: var(--color-bg-dark);
+    min-height: 100vh;
   }
 
   .edit-header {
     text-align: center;
-    max-width: 700px;
+    max-width: 720px;
     margin: 0 auto clamp(3.5rem, 6vw, 5.5rem);
   }
 
   .eyebrow {
-    font-size: 0.95rem;
-    letter-spacing: 0.2em;
+    font-size: 0.88rem;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--color-gold);
     display: block;
@@ -56,91 +57,94 @@ const products = heroSlides.filter(s => Boolean(s.slug && s.title));
 
   .edit-header h1 {
     font-size: clamp(2.5rem, 4.5vw, 4rem);
+    letter-spacing: 0.08em;
     color: var(--color-text-white);
     margin-bottom: 1.2rem;
   }
 
   .edit-intro {
-    font-size: 1.15rem;
+    font-size: clamp(1.05rem, 1.2vw, 1.25rem);
     color: var(--color-text-muted);
     line-height: 1.8;
+    letter-spacing: 0.02em;
   }
 
   .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: clamp(2rem, 3.5vw, 3.5rem);
+    gap: clamp(2.5rem, 4vw, 4rem);
     max-width: 1400px;
     margin: 0 auto;
   }
 
   .edit-item {
-    background-color: var(--color-bg-darker);
-    border: 1px solid var(--color-border-subtle);
+    background-color: transparent;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     text-decoration: none;
-    transition: transform 0.4s ease, border-color 0.4s ease;
-  }
-
-  .edit-item:hover {
-    transform: translateY(-4px);
-    border-color: rgba(197, 168, 108, 0.6);
+    transition: transform 0.4s var(--ease-luxury);
   }
 
   .item-visual {
     aspect-ratio: 16/9;
     overflow: hidden;
-    background-color: #0b1d1b;
+    background-color: var(--color-bg-darker);
+    border: 1px solid var(--color-border-subtle);
   }
 
   .item-visual img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s ease;
+    transition: transform 0.7s var(--ease-luxury);
   }
 
   .edit-item:hover .item-visual img {
-    transform: scale(1.04);
+    transform: scale(1.035);
   }
 
   .item-meta {
-    padding: 1.8rem;
+    padding: 1.4rem 0.2rem 0;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.5rem;
   }
 
   .item-title {
-    font-size: 1.15rem;
-    letter-spacing: 0.12em;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
     color: var(--color-text-white);
+    transition: color 0.3s ease;
+  }
+
+  .edit-item:hover .item-title {
+    color: var(--color-gold);
   }
 
   .item-materials {
     font-size: 0.95rem;
-    color: var(--color-gold);
+    color: var(--color-gold-light);
     white-space: pre-line;
-    line-height: 1.6;
+    line-height: 1.55;
+    letter-spacing: 0.03em;
   }
 
   .item-cta {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-gold-light);
-    margin-top: 0.6rem;
+    color: var(--color-gold);
+    margin-top: 0.4rem;
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s var(--ease-luxury), color 0.3s ease;
   }
 
   .edit-item:hover .item-cta {
     transform: translateX(4px);
-    color: var(--color-gold);
+    color: var(--color-gold-light);
   }
 
   @media (max-width: 768px) {
@@ -149,7 +153,7 @@ const products = heroSlides.filter(s => Boolean(s.slug && s.title));
     }
     .gallery-grid {
       grid-template-columns: 1fr;
-      gap: 1.5rem;
+      gap: 2.2rem;
     }
   }
 </style>

@@ -4,15 +4,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <BaseLayout title="Contact & Appointments — CARPE DIAM BOMBAY">
   <div class="contact-page">
     <div class="contact-container">
-      <header class="contact-header">
-        <span class="eyebrow">Private Concierge</span>
-        <h1>Appointments & Inquiries</h1>
-        <p class="contact-intro">
+      <header class="contact-header stagger-text-group" data-reveal-text-group>
+        <span class="eyebrow editorial-reveal-item" data-reveal-item>Private Concierge</span>
+        <h1 class="editorial-reveal-item" data-reveal-item>Appointments & Inquiries</h1>
+        <p class="contact-intro editorial-reveal-item" data-reveal-item>
           We invite you to experience our collections in person at our Bombay atelier or initiate a bespoke commission.
         </p>
       </header>
 
-      <div class="contact-content-grid">
+      <div class="contact-content-grid editorial-section-reveal" data-reveal-section>
         <div class="contact-info">
           <div class="info-block">
             <h3>The Bombay Atelier</h3>
@@ -37,7 +37,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
 
         <div class="contact-form-wrapper">
-          <form class="appointment-form" onsubmit="event.preventDefault(); alert('Thank you. Our atelier concierge will contact you shortly.');">
+          <form class="appointment-form">
             <div class="form-group">
               <label for="name">Full Name</label>
               <input type="text" id="name" name="name" required placeholder="Lady / Gentleman" />
@@ -71,23 +71,43 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 
   <script>
-    function prefillInquiry() {
+    function setupContactForm() {
       const params = new URLSearchParams(window.location.search);
       const inquiry = params.get('inquiry');
-      if (!inquiry) return;
       const msg = document.getElementById('message') as HTMLTextAreaElement | null;
       const interest = document.getElementById('interest') as HTMLSelectElement | null;
-      if (interest) interest.value = 'polki';
-      if (msg && !msg.value) {
+      if (inquiry && interest) interest.value = 'appointment';
+      if (inquiry && msg && !msg.value) {
         const formatted = inquiry.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
         msg.value = `I am interested in requesting a private viewing of ${formatted}.`;
       }
+
+      const form = document.querySelector('.appointment-form') as HTMLFormElement | null;
+      if (!form || form.dataset.bound) return;
+      form.dataset.bound = 'true';
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const name = (data.get('name') as string) || '';
+        const email = (data.get('email') as string) || '';
+        const area = (data.get('interest') as string) || '';
+        const note = (data.get('message') as string) || '';
+
+        const subject = encodeURIComponent(`Private Viewing Request: ${name}`);
+        const body = encodeURIComponent(
+          `Client: ${name}\nEmail: ${email}\nInterest: ${area}\n\nInquiry Details:\n${note}`
+        );
+        window.location.href = `mailto:concierge@carpediam.com?subject=${subject}&body=${body}`;
+      });
     }
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', prefillInquiry);
+      document.addEventListener('DOMContentLoaded', setupContactForm);
     } else {
-      prefillInquiry();
+      setupContactForm();
     }
+    document.addEventListener('astro:page-load', setupContactForm);
   </script>
 </BaseLayout>
 
@@ -224,18 +244,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin-top: 0.5rem;
     background-color: var(--color-gold);
     color: #06110f;
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
+    font-size: 1.02rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    padding: 1rem 2rem;
+    padding: 1.1rem 2rem;
     width: 100%;
     box-sizing: border-box;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.35s var(--ease-luxury), transform 0.25s var(--ease-luxury), box-shadow 0.35s var(--ease-luxury);
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
   }
 
   .submit-btn:hover {
     background-color: var(--color-gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(197, 168, 108, 0.22);
   }
 
   @media (max-width: 768px) {

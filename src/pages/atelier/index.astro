@@ -4,18 +4,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 <BaseLayout title="The Atelier — CARPE DIAM BOMBAY">
   <div class="atelier-page">
     <div class="atelier-hero">
-      <div class="atelier-hero-bg">
-        <img src="/Homepage-1.webp" alt="Atelier Landscape" class="hero-image" />
+      <div 
+        class="atelier-hero-bg cinematic-image-wrapper" 
+        data-reveal-image 
+        data-parallax-image
+      >
+        <img src="/Homepage-1.avif" alt="Atelier Landscape" class="hero-image" />
       </div>
-      <div class="hero-text-overlay">
-        <span class="eyebrow">The Atelier</span>
-        <h1>Bombay Heritage</h1>
+      <div class="hero-text-overlay stagger-text-group" data-reveal-text-group>
+        <span class="eyebrow editorial-reveal-item" data-reveal-item>The Atelier</span>
+        <h1 class="editorial-reveal-item" data-reveal-item>Bombay Heritage</h1>
       </div>
     </div>
 
     <section class="atelier-body">
       <div class="content-wrapper">
-        <div class="prose-section">
+        <div class="prose-section editorial-section-reveal" data-reveal-section>
           <h2>The Art of Polki & Carved Gems</h2>
           <p>
             Rooted in the coastal tapestry and grand artistic traditions of Bombay, Carpe Diam breathes renewed modern life into royal Indian jewelcraft.
@@ -25,16 +29,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </p>
         </div>
 
-        <div class="craft-details-grid">
-          <div class="craft-item">
+        <div class="craft-details-grid" data-editorial-gallery>
+          <div class="craft-item editorial-gallery-item">
             <h3>Provenance</h3>
             <p>Ethically sourced stones, individually selected for fire, inclusions, and depth of color.</p>
           </div>
-          <div class="craft-item">
+          <div class="craft-item editorial-gallery-item">
             <h3>Hand Enameling</h3>
             <p>Meenakari and miniature lacework fused at high temperatures to preserve brilliant floral hues.</p>
           </div>
-          <div class="craft-item">
+          <div class="craft-item editorial-gallery-item">
             <h3>Bespoke Commission</h3>
             <p>One-of-a-kind heirlooms tailored to the collector's personal narrative and proportions.</p>
           </div>
@@ -47,28 +51,31 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 <style>
   .atelier-page {
     background-color: var(--color-bg-dark);
+    min-height: 100vh;
   }
 
   .atelier-hero {
     position: relative;
-    height: 65vh;
-    min-height: 450px;
+    height: 68vh;
+    min-height: 480px;
     display: flex;
     align-items: flex-end;
-    padding: clamp(3rem, 6vh, 5rem) var(--spacing-header-x);
+    padding: clamp(3rem, 6vh, 5.5rem) var(--spacing-header-x);
     overflow: hidden;
   }
 
   .atelier-hero-bg {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .hero-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.65);
+    filter: brightness(0.6);
   }
 
   .hero-text-overlay {
@@ -78,68 +85,81 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   .eyebrow {
     display: block;
-    font-size: 0.95rem;
-    letter-spacing: 0.2em;
+    font-size: 0.9rem;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--color-gold);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
   }
 
   .hero-text-overlay h1 {
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-size: clamp(2.5rem, 5.2vw, 4.6rem);
+    letter-spacing: 0.08em;
     color: var(--color-text-white);
   }
 
   .atelier-body {
-    padding: clamp(4rem, 8vw, 7rem) var(--spacing-header-x);
+    padding: clamp(4rem, 8vw, 7.5rem) var(--spacing-header-x);
   }
 
   .content-wrapper {
-    max-width: 900px;
+    max-width: 920px;
     margin: 0 auto;
   }
 
   .prose-section {
-    margin-bottom: 4rem;
+    margin-bottom: clamp(3.5rem, 6vw, 5rem);
   }
 
   .prose-section h2 {
-    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+    letter-spacing: 0.08em;
     color: var(--color-gold-light);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.6rem;
   }
 
   .prose-section p {
-    font-size: 1.2rem;
+    font-size: clamp(1.1rem, 1.25vw, 1.25rem);
     color: var(--color-text-muted);
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
+    line-height: 1.85;
+    margin-bottom: 1.6rem;
+    letter-spacing: 0.02em;
   }
 
   .craft-details-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: clamp(2rem, 3.5vw, 3rem);
     border-top: 1px solid var(--color-border-subtle);
-    padding-top: 3rem;
+    padding-top: clamp(2.5rem, 4vw, 3.5rem);
+  }
+
+  .craft-item {
+    transition: transform 0.35s var(--ease-luxury);
+  }
+
+  .craft-item:hover {
+    transform: translateY(-3px);
   }
 
   .craft-item h3 {
     font-size: 1.2rem;
+    letter-spacing: 0.1em;
     color: var(--color-gold);
     margin-bottom: 0.75rem;
   }
 
   .craft-item p {
-    font-size: 1rem;
+    font-size: 1.02rem;
     color: var(--color-text-muted);
     line-height: 1.7;
+    letter-spacing: 0.02em;
   }
 
   @media (max-width: 768px) {
     .atelier-hero {
       padding: 3rem 1.25rem;
-      min-height: 380px;
+      min-height: 400px;
     }
     .atelier-body {
       padding: 3rem 1.25rem 4rem;
@@ -148,7 +168,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       margin-bottom: 2.5rem;
     }
     .craft-details-grid {
-      gap: 1.8rem;
+      gap: 2rem;
     }
   }
 </style>
