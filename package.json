@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "cp -rf node_modules/@rollup/wasm-node/* node_modules/rollup/ 2>/dev/null || true; astro dev",
-    "start": "cp -rf node_modules/@rollup/wasm-node/* node_modules/rollup/ 2>/dev/null || true; astro dev",
-    "build": "cp -rf node_modules/@rollup/wasm-node/* node_modules/rollup/ 2>/dev/null || true; astro build",
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
     "preview": "astro preview",
     "test": "node tests/smoke.mjs",
-    "postinstall": "cp -rf node_modules/@rollup/wasm-node/* node_modules/rollup/ 2>/dev/null || true"
+    "postinstall": "node -e \"try{fs.cpSync('node_modules/@rollup/wasm-node','node_modules/rollup',{recursive:true})}catch{}\""
   },
   "dependencies": {
     "@rollup/wasm-node": "^4.67.4",

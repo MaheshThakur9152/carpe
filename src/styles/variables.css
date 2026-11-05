@@ -1,5 +1,6 @@
 :root {
   --font-primary: "Amiri", serif;
+  --font-serif: var(--font-primary);
   
   --color-bg-dark: #0a1917;
   --color-bg-darker: #06110f;

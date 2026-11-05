@@ -1,20 +1,82 @@
 ---
 import HeroSlide from './HeroSlide.astro';
 import CarouselControls from './CarouselControls.astro';
+import Logo from './Logo.astro';
 import { heroSlides } from '../data/heroSlides';
 ---
 <section class="hero-carousel-container" aria-roledescription="carousel" aria-label="High Jewellery Collection">
   <div class="slides-track" id="hero-carousel-track">
-    {heroSlides.map((slide, index) => (
+    <!-- Slide 0: The World of Carpe Diam -->
+    <HeroSlide 
+      slide={heroSlides[0]} 
+      index={0} 
+      isActive={true} 
+    />
+
+    <!-- Slide 1: The Meher Necklace -->
+    <HeroSlide 
+      slide={heroSlides[1]} 
+      index={1} 
+      isActive={false} 
+    />
+
+    <!-- Slide 2: Glenn Spiro style Atelier / Passion Slide (Directly after The Meher Necklace) -->
+    <article 
+      class="hero-slide passion-slide"
+      data-slide-index={2}
+      aria-hidden="true"
+    >
+      <div class="passion-container">
+        <!-- Left: Rushabh Doshi (Glenn Spiro split layout) -->
+        <div class="passion-media-pane">
+          <img 
+            src="/images/rushabh-doshi.avif" 
+            alt="Rushabh Doshi — Master Jeweller, Carpe Diam Bombay" 
+            class="passion-image"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <!-- Right: Editorial Narrative on Clean White Background -->
+        <div class="passion-text-pane">
+          <div class="passion-content">
+            <p class="passion-lead">
+              <strong>Known to collectors and aficionados,</strong> the jewellery House Carpe Diam Bombay has become one of the most celebrated private high jewellery ateliers in the world. Rooted in the storied heritage of Bombay and its royal gemological traditions, the Maison crafts singular creations for discerning patrons across the globe.
+            </p>
+            <p>
+              In their appointment-only Bombay atelier, Carpe Diam unites centuries-old Indian goldsmithing with an exceptional curation of rare uncut polki diamonds, carved Colombian emeralds, and fiery tanzanites. Each bespoke heirloom is meticulously sculpted in 14kt and 18kt gold, taking months or even years of patient handcraft to achieve absolute perfection.
+            </p>
+            <p>
+              Carpe Diam Bombay is celebrated for having an unconventional approach to the Haute Joaillerie world, but it’s the risks they take in a realm dominated by old luxury marques, that truly set them apart. The house has a non-conformist attitude to precious gemstones — they attempt the impossible and dream up imaginative designs that have never been done before. The gems are the elusive varieties that jewellers dream about, sometimes for decades, until that sought-after stone with a spellbinding hue, intensity, uniformity of colour and inner sparkle finally surfaces.
+            </p>
+            <p>
+              The resulting jewellery turns heads for all the right reasons, commanding attention for the originality and confidence that they embody.
+            </p>
+            <p class="passion-quote">
+              “We don’t make what people want; we make what we love — and if they love it, then great,” the Maison says. “If not, we’ll keep it in the safe until the right person walks through the door.”
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Brand Logo centered in middle across seam -->
+        <div class="passion-bottom-logo" aria-label="Carpe Diam Bombay">
+          <Logo variant="dark" class="passion-logo-wordmark" />
+        </div>
+      </div>
+    </article>
+
+    <!-- Slides 3+: Remaining High Jewellery Collection Slides -->
+    {heroSlides.slice(2).map((slide, idx) => (
       <HeroSlide 
         slide={slide} 
-        index={index} 
-        isActive={index === 0} 
+        index={idx + 3} 
+        isActive={false} 
       />
     ))}
   </div>
 
-  <CarouselControls totalSlides={heroSlides.length} />
+  <CarouselControls totalSlides={heroSlides.length + 1} />
 </section>
 
 <style>
@@ -33,6 +95,195 @@ import { heroSlides } from '../data/heroSlides';
     position: relative;
     width: 100%;
     height: 100%;
+  }
+
+  /* Glenn Spiro style 50/50 split passion slide */
+  .hero-slide.passion-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.85s var(--ease-luxury), visibility 0.85s var(--ease-luxury);
+    pointer-events: none;
+    overflow: hidden;
+    background-color: #ffffff;
+  }
+
+  .hero-slide.passion-slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 5;
+  }
+
+  .passion-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: #ffffff;
+  }
+
+  .passion-media-pane {
+    flex: 0 0 50%;
+    width: 50%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: #0b0b0b;
+  }
+
+  .passion-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+    user-select: none;
+  }
+
+  .passion-text-pane {
+    flex: 0 0 50%;
+    width: 50%;
+    height: 100%;
+    background-color: #ffffff;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(5.5rem, 8.5vh, 6.5rem) clamp(2.5rem, 4.5vw, 4.5rem) clamp(5rem, 8vh, 6.5rem);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .passion-content {
+    max-width: 580px;
+    width: 100%;
+    margin: 0 auto;
+    color: #1a1a1a;
+  }
+
+  .passion-content p {
+    font-family: var(--font-primary);
+    font-size: clamp(0.88rem, 0.95vw, 1.02rem);
+    line-height: 1.72;
+    color: #262626;
+    margin-bottom: clamp(0.75rem, 1.3vh, 1rem);
+    letter-spacing: 0.015em;
+  }
+
+  .passion-content strong {
+    font-weight: 600;
+    color: #000000;
+  }
+
+  .passion-content .passion-quote {
+    font-style: italic;
+    color: #111111;
+    margin-bottom: 0;
+  }
+
+  /* Centered logo in the middle across seam */
+  .passion-bottom-logo {
+    position: absolute;
+    bottom: clamp(1.8rem, 3.5vh, 2.8rem);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 12;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    pointer-events: auto;
+  }
+
+  .passion-bottom-logo :global(.logo-svg) {
+    display: block;
+    margin: 0 auto;
+    width: clamp(150px, 11vw, 185px);
+    height: auto;
+    filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.75)) drop-shadow(0 0 6px rgba(255, 255, 255, 0.45));
+  }
+
+  /* Keep navbar links styled in dark charcoal on white */
+  :global(body.has-light-hero-slide .site-header.light .nav-link) {
+    color: #1a1a1a !important;
+    letter-spacing: 0.1em;
+  }
+
+  :global(body.has-light-hero-slide .site-header.light .nav-link:hover) {
+    color: #b49875 !important;
+  }
+
+  /* Dark arrow override on right pane when passion slide is active */
+  :global(.hero-carousel-container.has-light-slide .next-btn .desktop-arrow line),
+  :global(.hero-carousel-container.has-light-slide .next-btn .desktop-arrow polyline) {
+    stroke: #1a1a1a !important;
+  }
+
+  :global(.hero-carousel-container.has-light-slide .next-btn:hover .desktop-arrow line),
+  :global(.hero-carousel-container.has-light-slide .next-btn:hover .desktop-arrow polyline) {
+    stroke: #b49875 !important;
+  }
+
+  /* Hide mobile center logo in controls on light slide */
+  :global(.hero-carousel-container.has-light-slide .carousel-controls .mobile-center-logo) {
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  :global(.hero-carousel-container.has-light-slide .carousel-controls .control-btn) {
+    color: #1a1a1a !important;
+  }
+
+  :global(body.has-light-hero-slide .site-header .menu-line) {
+    background-color: #1a1a1a !important;
+  }
+
+  @media (max-width: 768px) {
+    .passion-container {
+      flex-direction: column;
+      height: 100%;
+      height: 100dvh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      background-color: #ffffff;
+      position: relative;
+    }
+
+    .passion-media-pane {
+      flex: 0 0 auto;
+      width: 100%;
+      height: clamp(240px, 38dvh, 320px);
+    }
+
+    .passion-text-pane {
+      flex: 1 0 auto;
+      width: 100%;
+      height: auto;
+      overflow-y: visible;
+      padding: 1.5rem 1.25rem max(6rem, env(safe-area-inset-bottom) + 5rem);
+    }
+
+    .passion-content {
+      max-width: 100%;
+    }
+
+    .passion-content p {
+      font-size: 0.88rem;
+      line-height: 1.62;
+      margin-bottom: 0.9rem;
+    }
+
+    .passion-bottom-logo {
+      position: static;
+      transform: none;
+      margin: 2rem auto 1.5rem;
+      padding: 0;
+    }
   }
 
   @media (min-aspect-ratio: 16/9) {
@@ -91,6 +342,10 @@ import { heroSlides } from '../data/heroSlides';
         slide.setAttribute('aria-hidden', (!isActive).toString());
       });
 
+      const isLightSlide = slides[currentIndex]?.classList.contains('passion-slide') ?? false;
+      container.classList.toggle('has-light-slide', isLightSlide);
+      document.body.classList.toggle('has-light-hero-slide', isLightSlide);
+
       preloadAdjacent(currentIndex);
     }
 
@@ -103,44 +358,6 @@ import { heroSlides } from '../data/heroSlides';
 
     prevBtn?.addEventListener('click', () => goToSlide(currentIndex - 1));
     nextBtn?.addEventListener('click', () => goToSlide(currentIndex + 1));
-
-    // Desktop mouse wheel / trackpad scroll slide progression
-    let isWheelThrottled = false;
-    let wheelDeltaAccumulator = 0;
-    const wheelThreshold = 35;
-
-    function onWheel(e: WheelEvent) {
-      if (!document.contains(container)) return;
-
-      const overlay = document.getElementById('mobile-menu-overlay');
-      if (overlay?.classList.contains('is-active')) return;
-
-      if (isWheelThrottled) return;
-
-      wheelDeltaAccumulator += e.deltaY;
-
-      if (Math.abs(wheelDeltaAccumulator) >= wheelThreshold) {
-        if (wheelDeltaAccumulator > 0) {
-          goToSlide(currentIndex + 1);
-        } else {
-          goToSlide(currentIndex - 1);
-        }
-
-        wheelDeltaAccumulator = 0;
-        isWheelThrottled = true;
-
-        setTimeout(() => {
-          isWheelThrottled = false;
-          wheelDeltaAccumulator = 0;
-        }, 850);
-      }
-    }
-
-    if ((window as any).__cd_carousel_wheel) {
-      window.removeEventListener('wheel', (window as any).__cd_carousel_wheel);
-    }
-    (window as any).__cd_carousel_wheel = onWheel;
-    window.addEventListener('wheel', onWheel, { passive: true });
 
     // Keyboard navigation with single-listener guarantee
     function onKeyDown(e: KeyboardEvent) {
@@ -188,7 +405,7 @@ import { heroSlides } from '../data/heroSlides';
       } else {
         isSwiping = false;
       }
-    }, { passive: true });
+    });
 
     // Viewport-edge click navigation (Left 20% Prev / Right 20% Next / Center 60% None)
     container.addEventListener('click', (e: MouseEvent) => {
@@ -199,7 +416,7 @@ import { heroSlides } from '../data/heroSlides';
 
       // Ignore interactive controls, links, slide content text, hamburger, buttons
       const target = e.target as HTMLElement | null;
-      if (target?.closest('button, a, .slide-content, .carousel-controls, [data-menu-trigger], [data-menu-close]')) {
+      if (target?.closest('button, a, .slide-content, .carousel-controls, .passion-content, .passion-text-pane, .passion-bottom-logo, [data-menu-trigger], [data-menu-close]')) {
         return;
       }
 
@@ -223,7 +440,7 @@ import { heroSlides } from '../data/heroSlides';
     if (window.matchMedia('(hover: hover)').matches) {
       container.addEventListener('mousemove', (e: MouseEvent) => {
         const target = e.target as HTMLElement | null;
-        if (target?.closest('button, a, .carousel-controls, [data-menu-trigger], [data-menu-close]')) {
+        if (target?.closest('button, a, .carousel-controls, .passion-content, .passion-text-pane, .passion-bottom-logo, [data-menu-trigger], [data-menu-close]')) {
           container.style.cursor = '';
           return;
         }

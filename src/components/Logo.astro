@@ -1,6 +1,6 @@
 ---
 interface Props {
-  variant?: 'light' | 'dark';
+  variant?: 'light' | 'dark' | 'gold';
   class?: string;
 }
 
@@ -56,7 +56,12 @@ const { variant = 'light', class: className = '' } = Astro.props;
     fill: #111111;
   }
   .logo-link.dark .logo-bombay path {
-    fill: #666666;
+    fill: var(--color-gold);
+  }
+  /* Gold theme for atelier / glenn spiro style */
+  .logo-link.gold .logo-carpediam path,
+  .logo-link.gold .logo-bombay path {
+    fill: #b49875;
   }
 
   @media (max-width: 768px) {
