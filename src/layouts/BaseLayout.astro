@@ -37,6 +37,16 @@ const {
       type="font/woff2" 
       crossorigin 
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+    <link
+      rel="preload"
+      href="/carpediam-logo-original.svg"
+      as="image"
+      type="image/svg+xml"
+      fetchpriority="high"
+    />
     {isHome && (
       <>
         <link 
@@ -45,13 +55,6 @@ const {
           as="image" 
           type="image/avif" 
           fetchpriority="high" 
-        />
-        <link
-          rel="preload"
-          href="/images/carpediam-loader-poster.webp"
-          as="image"
-          type="image/webp"
-          fetchpriority="high"
         />
       </>
     )}
